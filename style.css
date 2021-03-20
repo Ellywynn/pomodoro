@@ -1,0 +1,184 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html{
+    height: 100%;
+    width: 100%;
+    background-color: #444;
+}
+
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header{
+    height: 120px;
+    width: 100%;
+}
+
+header > div{
+    width: 70%;
+    height: 80%;
+    background-color: #333;
+    border: 4px solid #222;
+}
+
+header > div > h1{
+    font-size: 60px;
+    font-family: Verdana, Geneva, sans-serif;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 40px;
+}
+
+main{
+    width: 100%;
+    background-color: #888;
+}
+
+main > .current-task{
+    height: 300px;
+    width: 100%;
+}
+
+.current-task > .wrapper{
+    width: 70%;
+    height: 80%;
+    background-color: #666;
+    display: flex;
+    border: 2px solid black;
+}
+
+.wrapper > .timer{
+    width: 40%;
+    height: 100%;
+    border-right: 2px solid black;
+    flex-direction: column;
+    position: relative;
+}
+
+.timer > p{
+    font-size: 70px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.timer > .timer-actions{
+    position: absolute;
+    bottom: 20px;
+    gap: 20px;
+}
+
+.wrapper > .task-info{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.task-info > .description{
+    height: 100%;
+}
+
+.description > h2{
+    color: #000;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 15px;
+    text-align: justify;
+}
+
+.timer-actions > button{
+    width: 100px;
+    height: 40px;
+    background-color: #666;
+    outline: none;
+    border: 1px solid black;
+}
+
+.add-task{
+    height: 150px;
+    width: 100%;
+}
+
+.add-task > div{
+    width: 70%;
+    height: 70%;
+    position: relative;
+}
+
+.add-task #add-task-input{
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-style: none none solid none;
+    border-bottom: 3px solid black;
+    font-size: 50px;
+    padding: 0 15px;
+    background-color: #333;
+    color: white;
+}
+
+.add-task #chars{
+    position: absolute;
+    font-size: 10px;
+    font-family: Verdana, Geneva, sans-serif;
+    right: 10px;
+    bottom: 10px;
+    color: #fff;
+}
+
+.task-list{
+    width: 100%;
+    flex-direction: column;
+}
+
+.task-list > #task-count{
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 30px;
+    color: #ddd;
+}
+
+.task{
+    background-color: #aaa;
+    width: 70%;
+    height: 200px;
+    flex-direction: row;
+    border: 2px solid black;
+    margin: 10px 0;
+    background-color: #555;
+}
+
+.task > .actions{
+    width: 15%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.actions > button{
+    height: 25%;
+    width: 70%;
+    background-color: #666;
+    border: 1px solid black;
+    margin: 5px 0;
+    outline: none;
+}
+
+.task > .task-description{
+    width: 85%;
+    height: 100%;
+    border-left: 2px solid black;
+    text-align: justify;
+}
+
+.task-description > p{
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 20px;
+    padding: 10px;
+    color: #111;
+}

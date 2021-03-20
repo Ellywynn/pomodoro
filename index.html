@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pomodoro App</title>
+</head>
+
+<body>
+
+    <header class="flex">
+        <div class="flex">
+            <h1>POMODORO</h1>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="current-task flex">
+            <div class="wrapper">
+                <div class="timer flex">
+                    <p id="time">25:00</p>
+                    <div class="timer-actions flex">
+                        <button id="start-timer">START</button>
+                        <button id="pause-timer">PAUSE</button>
+                        <button id="stop-timer">STOP</button>
+                    </div>
+                </div>
+                <div class="task-info">
+                    <div class="description flex">
+                        <h2 class="task-name">Task Description</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-task flex">
+            <div>
+                <input type="text" maxlength="300" id="add-task-input" placeholder="Add new task">
+                <p id="chars"></p>
+            </div>
+        </div>
+
+        <div id="tasks" class="task-list flex">
+            <h2 id="task-count"></h2>
+            <section class="task flex">
+                <div class="actions flex">
+                    <button class="action start">></button>
+                    <button class="action done">v</button>
+                    <button class="action delete">x</button>
+                </div>
+                <div class="task-description flex">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quae fugit, reprehenderit
+                        reiciendis ducimus et corporis optio non accusantium illo adipisci recusandae ab atque, placeat
+                        porro velit dolores eligendi doloremque pariatur magni laboriosam. Itaque doloremque deleniti
+                        delectus accusamus! Ab, hic quaerat. Sequi ex exercitationem distinctio obcaecati eaque amet
+                        explicabo ea.</p>
+                </div>
+            </section>
+            <section class="task flex">
+                <div class="actions flex">
+                    <button class="action start">></button>
+                    <button class="action done">v</button>
+                    <button class="action delete">x</button>
+                </div>
+                <div class="task-description flex">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam quae fugit, reprehenderit
+                        reiciendis ducimus et corporis optio non accusantium illo adipisci recusandae ab atque, placeat
+                        porro velit dolores eligendi doloremque pariatur magni laboriosam. Itaque doloremque deleniti
+                        delectus accusamus!</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <h3>Ellywynn &copy2021 luv</h3>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- script -->
+    <script src="index.js"></script>
+</body>
+
+</html>
