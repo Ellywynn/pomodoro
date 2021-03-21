@@ -10,27 +10,13 @@ let startTaskTimer = document.querySelector('#start-timer');
 let pauseTaskTimer = document.querySelector('#pause-timer');
 let stopTaskTimer = document.querySelector('#stop-timer');
 
-let seconds = 0, minutes = 0, hours = 0;
+let seconds = 0, minutes = 25, hours = 0;
 let timerID = 0;
 
 calculateTasksCount();
+updateTimerText();
 
 // TODO: включить случай строки без пробелов и переносов(разбить ее на части через каждые 50 символов)
-
-for (let i = 0; i < allTasks.length; i++) {
-    allTasks[i].addEventListener('mouseover', e => {
-        e.stopPropagation();
-        e.currentTarget.style = 'background-color: #888;';
-    });
-    allTasks[i].addEventListener('mouseout', e => {
-        e.stopPropagation();
-        e.currentTarget.style = "background-color: #666;";
-    });
-    allTasks[i].addEventListener('click', e => {
-        e.stopPropagation();
-        taskDescription.textContent = e.currentTarget.querySelector('.task-description > p').textContent;
-    });
-}
 
 input.addEventListener('input', e => {
     if (input.value === '') {
@@ -43,10 +29,10 @@ input.addEventListener('input', e => {
 
 input.addEventListener('keydown', e => {
     if (e.keyCode === 13 && input.value !== '') {
-        tasks.innerHTML += createTask(input.value);
+        createTask(input.value);
         input.value = '';
         chars.textContent = '';
-        //calculateTasksCount();
+        calculateTasksCount();
     }
 });
 
@@ -64,16 +50,58 @@ stopTaskTimer.addEventListener('click', e => {
 });
 
 function createTask(text) {
-    return '<section class="task flex">' +
-        '<div div class="actions flex">' +
-        '<button class="start">></button>' +
-        '<button class="done">v</button>' +
-        '<button class="delete">x</button>' +
-        '</div>' +
-        '<div class="task-description flex">' +
-        '<p>' + text + '</p>' +
-        '</div>' +
-        '</section>';
+    let section = document.createElement('section');
+    section.classList.add('task');
+    section.classList.add('flex');
+
+    let divActions = document.createElement('div');
+    divActions.classList.add('actions');
+    divActions.classList.add('flex');
+
+    let start = document.createElement('button');
+    start.classList.add('start');
+    start.textContent = 'START';
+    let done = document.createElement('button');
+    done.classList.add('done');
+    done.textContent = 'DONE';
+    done.addEventListener('click', e => {
+        e.stopPropagation();
+        tasks.removeChild(e.path[2]);
+        calculateTasksCount();
+    });
+    let del = document.createElement('button');
+    del.classList.add('delete');
+    del.textContent = 'DELETE';
+
+    let divDesc = document.createElement('div');
+    divDesc.classList.add('task-description');
+    divDesc.classList.add('flex');
+
+    let p = document.createElement('p');
+    p.textContent = text;
+
+    divActions.appendChild(start);
+    divActions.appendChild(done);
+    divActions.appendChild(del);
+    divDesc.appendChild(p);
+
+    section.appendChild(divActions);
+    section.appendChild(divDesc);
+
+    section.addEventListener('mouseover', e => {
+        e.stopPropagation();
+        e.currentTarget.style = 'background-color: #888;';
+    });
+    section.addEventListener('mouseout', e => {
+        e.stopPropagation();
+        e.currentTarget.style = "background-color: #666;";
+    });
+    section.addEventListener('click', e => {
+        e.stopPropagation();
+        taskDescription.textContent = e.currentTarget.querySelector('.task-description > p').textContent;
+    });
+
+    tasks.appendChild(section);
 }
 
 function calculateTasksCount() {
@@ -87,17 +115,21 @@ function startTimer() {
 }
 
 function updateTimer() {
-    seconds++;
-    if (seconds === 60) {
-        minutes++;
-        seconds = 0;
+    seconds--;
+    if (seconds === -1) {
+        minutes--;
+        seconds = 59;
     }
-    if (minutes === 60) {
-        hours++;
-        minutes = 0;
+    if (minutes === -1) {
+        hours--;
+        minutes = 59;
+        seconds = 59;
     }
 
-    updateTimerText();
+    if (hours === 0 && minutes === 0 && seconds === 0)
+        stopTimer();
+    else
+        updateTimerText();
 }
 
 function stopTimer() {

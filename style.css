@@ -96,9 +96,6 @@ main > .current-task{
 .timer-actions > button{
     width: 100px;
     height: 40px;
-    background-color: #666;
-    outline: none;
-    border: 1px solid black;
 }
 
 .add-task{
@@ -154,19 +151,65 @@ main > .current-task{
     background-color: #555;
 }
 
-.task > .actions{
+.task > .task-info{
     width: 15%;
     height: 100%;
     flex-direction: column;
+    background-color: blue;
+}
+
+.actions{
+    background-color: #999;
+    width: 100%;
+    height: 25%;
+    flex-direction: row;
+    border-bottom: 1px solid black;
 }
 
 .actions > button{
-    height: 25%;
-    width: 70%;
-    background-color: #666;
-    border: 1px solid black;
-    margin: 5px 0;
+    height: 30px;
+    width: 30px;
+    margin: 0 10px;
+}
+
+.task-info > .task-time{
+    height: 50%;
+    width: 100%;
+    background-color: #888;
+    border-bottom: 1px solid black;
+}
+
+.task-time > input[type=number]{
+    width: 30px;
+    height: 30px;
     outline: none;
+    border: none;
+    margin: 0 10px;
+    background-color: #888;
+    text-align: center;
+    padding: 3px 0 0 0;
+    font-size: 20px;
+}
+
+.task-time > input[type=number]:hover{
+    background-color: #666;
+}
+
+
+input[type='number']::-webkit-inner-spin-button, 
+input[type='number']::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.task-info > .pomodoro-actions{
+    height: 25%;
+    width: 100%;
+    background-color: #aaa;
+}
+
+.pomodoro-actions > button{
+    margin: 0 10px;
 }
 
 .task > .task-description{
@@ -181,4 +224,25 @@ main > .current-task{
     font-size: 20px;
     padding: 10px;
     color: #111;
+}
+
+button{
+    min-width: 30px;
+    min-height: 30px;
+    background-color: #666;
+    border: 1px solid black;
+    outline: none;
+}
+
+button:hover{
+    background-color: #888;
+}
+
+#tasks{
+    min-height: 250px;
+}
+
+footer{
+    text-align: center;
+    font-family: Verdana, Geneva, sans-serif;
 }
