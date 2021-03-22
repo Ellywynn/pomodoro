@@ -7,7 +7,7 @@
 body, html{
     height: 100%;
     width: 100%;
-    background-color: #444;
+    background-color: #888;
 }
 
 .flex{
@@ -39,6 +39,7 @@ header > div > h1{
 main{
     width: 100%;
     background-color: #888;
+    margin-bottom: 15px;
 }
 
 main > .current-task{
@@ -130,9 +131,14 @@ main > .current-task{
     color: #fff;
 }
 
-.task-list{
+#tasks{
     width: 100%;
+}
+
+.task-list{
+    width: 70%;
     flex-direction: column;
+    background-color: #777;
 }
 
 .task-list > #task-count{
@@ -143,7 +149,7 @@ main > .current-task{
 
 .task{
     background-color: #aaa;
-    width: 70%;
+    width: 95%;
     height: 200px;
     flex-direction: row;
     border: 2px solid black;
@@ -231,11 +237,12 @@ button:hover{
     background-color: #888;
 }
 
-#tasks{
+.task-list{
     min-height: 250px;
+    width: 70%;
 }
 
 footer{
-    text-align: center;
     font-family: Verdana, Geneva, sans-serif;
+    height: 50px;
 }

@@ -1,7 +1,7 @@
 let input = document.querySelector('#add-task-input');
 let chars = document.querySelector('#chars');
 let taskCountText = document.querySelector('#task-count');
-let tasks = document.querySelector('#tasks');
+let tasks = document.querySelector('.task-list');
 let timeText = document.querySelector('#time');
 let allTasks = document.querySelectorAll('.task.flex');
 let taskDescription = document.querySelector('.task-name');
@@ -35,7 +35,6 @@ input.addEventListener('keydown', e => {
         if (count === 1) taskDescription.textContent = input.value;
         input.value = '';
         chars.textContent = '';
-
     }
 });
 
@@ -89,6 +88,9 @@ function createTask(text) {
         inputs[i] = document.createElement('input');
         inputs[i].type = 'text';
         inputs[i].maxLength = '2';
+        inputs[i].addEventListener('click', e => {
+            e.stopPropagation();
+        });
     }
 
     inputs[0].value = '00';
@@ -218,7 +220,7 @@ function stopTimer() {
     clearInterval(timerID);
     let time = { seconds: seconds, minutes: minutes, hours: hours };
     seconds = 0;
-    minutes = 0;
+    minutes = 25;
     hours = 0;
     updateTimerText();
     return time;
@@ -240,8 +242,7 @@ function updateTimerText() {
 }
 
 function formatTime(time) {
-    if (time < 10)
-        return '0' + time;
-    else
-        return time;
+    if (time < 0) return 0;
+    if (time < 10) return '0' + time;
+    return time;
 }
