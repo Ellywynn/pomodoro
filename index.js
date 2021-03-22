@@ -1,6 +1,6 @@
 let input = document.querySelector('#add-task-input');
 let chars = document.querySelector('#chars');
-let taskCount = document.querySelector('#task-count');
+let taskCountText = document.querySelector('#task-count');
 let tasks = document.querySelector('#tasks');
 let timeText = document.querySelector('#time');
 let allTasks = document.querySelectorAll('.task.flex');
@@ -12,6 +12,7 @@ let stopTaskTimer = document.querySelector('#stop-timer');
 
 let seconds = 0, minutes = 25, hours = 0;
 let timerID = 0;
+let taskCount = 0;
 
 calculateTasksCount();
 updateTimerText();
@@ -30,9 +31,11 @@ input.addEventListener('input', e => {
 input.addEventListener('keydown', e => {
     if (e.keyCode === 13 && input.value !== '') {
         createTask(input.value);
+        let count = calculateTasksCount();
+        if (count === 1) taskDescription.textContent = input.value;
         input.value = '';
         chars.textContent = '';
-        calculateTasksCount();
+
     }
 });
 
@@ -54,24 +57,81 @@ function createTask(text) {
     section.classList.add('task');
     section.classList.add('flex');
 
+    let taskInfo = document.createElement('div');
+    taskInfo.classList.add('task-info');
+
     let divActions = document.createElement('div');
     divActions.classList.add('actions');
     divActions.classList.add('flex');
 
     let start = document.createElement('button');
     start.classList.add('start');
-    start.textContent = 'START';
+    start.textContent = '>';
     let done = document.createElement('button');
     done.classList.add('done');
-    done.textContent = 'DONE';
-    done.addEventListener('click', e => {
-        e.stopPropagation();
-        tasks.removeChild(e.path[2]);
-        calculateTasksCount();
-    });
+    done.textContent = 'v';
     let del = document.createElement('button');
     del.classList.add('delete');
-    del.textContent = 'DELETE';
+    del.textContent = 'x';
+    del.addEventListener('click', e => {
+        e.stopPropagation();
+        tasks.removeChild(e.path[3]);
+        calculateTasksCount();
+    });
+
+    let taskTime = document.createElement('div');
+    taskTime.classList.add('task-time');
+    taskTime.classList.add('flex');
+
+    let inputs = [];
+
+    for (let i = 0; i < 3; i++) {
+        inputs[i] = document.createElement('input');
+        inputs[i].type = 'text';
+        inputs[i].maxLength = '2';
+    }
+
+    inputs[0].value = '00';
+    inputs[1].value = '25';
+    inputs[2].value = '00';
+
+    let column1 = document.createElement('p');
+    let column2 = document.createElement('p');
+    column1.textContent = column2.textContent = ':';
+
+    let pomodoroActions = document.createElement('div');
+    pomodoroActions.classList.add('pomodoro-actions');
+    pomodoroActions.classList.add('flex');
+
+    let addButton = document.createElement('button');
+    let subButton = document.createElement('button');
+
+    addButton.classList.add('add');
+    subButton.classList.add('sub');
+
+    addButton.textContent = '+';
+    subButton.textContent = '-';
+
+    addButton.addEventListener('click', e => {
+        e.stopPropagation();
+        inputs[1].value = formatTime(parseInt(inputs[1].value) + 25);
+        if (parseInt(inputs[1].value) >= 60) {
+            inputs[0].value = formatTime(parseInt(inputs[0].value) + 1);
+            inputs[1].value = formatTime(parseInt(inputs[1].value) - 60);
+        }
+    });
+
+    subButton.addEventListener('click', e => {
+        e.stopPropagation();
+        if (inputs[0].value == 0 && inputs[1].value == 0) return;
+        inputs[1].value = inputs[1].value - 25;
+        if (inputs[1].value < 0) {
+            inputs[0].value = formatTime(inputs[0].value - 1);
+            inputs[1].value = formatTime(60 - (-inputs[1].value));
+        } else {
+            inputs[1].value = formatTime(inputs[1].value);
+        }
+    });
 
     let divDesc = document.createElement('div');
     divDesc.classList.add('task-description');
@@ -83,9 +143,23 @@ function createTask(text) {
     divActions.appendChild(start);
     divActions.appendChild(done);
     divActions.appendChild(del);
+
+    taskTime.appendChild(inputs[0]);
+    taskTime.appendChild(column1);
+    taskTime.appendChild(inputs[1]);
+    taskTime.appendChild(column2);
+    taskTime.appendChild(inputs[2]);
+
+    pomodoroActions.appendChild(addButton);
+    pomodoroActions.appendChild(subButton);
+
     divDesc.appendChild(p);
 
-    section.appendChild(divActions);
+    taskInfo.appendChild(divActions);
+    taskInfo.appendChild(taskTime);
+    taskInfo.appendChild(pomodoroActions);
+
+    section.appendChild(taskInfo);
     section.appendChild(divDesc);
 
     section.addEventListener('mouseover', e => {
@@ -98,7 +172,12 @@ function createTask(text) {
     });
     section.addEventListener('click', e => {
         e.stopPropagation();
+        stopTimer();
         taskDescription.textContent = e.currentTarget.querySelector('.task-description > p').textContent;
+        hours = parseInt(inputs[0].value);
+        minutes = parseInt(inputs[1].value);
+        seconds = parseInt(inputs[2].value);
+        updateTimerText();
     });
 
     tasks.appendChild(section);
@@ -106,7 +185,10 @@ function createTask(text) {
 
 function calculateTasksCount() {
     let count = Array.from(document.querySelectorAll('.task.flex')).length;
-    taskCount.textContent = 'You have ' + count + ' tasks';
+    taskCountText.textContent = 'You have ' + count + ' tasks';
+    taskCount = count;
+    if (count === 0) taskDescription.textContent = 'Task description';
+    return count;
 }
 
 function startTimer() {
