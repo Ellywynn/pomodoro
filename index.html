@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <video id="background" autoplay loop muted>
+        <source src="img/street.mp4" type="video/mp4">
+    </video>
 
     <header class="flex">
         <div class="flex">
@@ -18,37 +21,84 @@
     </header>
 
     <main>
-
-        <div class="current-task flex">
-            <div class="wrapper">
-                <div class="timer flex">
-                    <p id="time">25:00</p>
-                    <div class="timer-actions flex">
-                        <button id="start-timer">START</button>
-                        <button id="pause-timer">PAUSE</button>
-                        <button id="stop-timer">STOP</button>
-                    </div>
-                </div>
-                <div class="task-info">
-                    <div class="description flex">
-                        <h2 class="task-name">Task Description</h2>
-                    </div>
-                </div>
+        <div class="current-task">
+            <div class="time flex">
+                <p id="time">25:00</p>
             </div>
+            <div class="time-actions flex">
+                <button class="action start">start</button>
+                <button class="action pause">pause</button>
+                <button class="action stop">stop</button>
+                <button class="action done">done</button>
+                <button class="action delete">delete</button>
+            </div>
+            <div class="current-task-info">
+                <span>Sessions: 1</span>
+                <span>Total: 25:00</span>
+                <span>Remaining: 25:00</span>
+            </div>
+            <hr>
+            <div class="description flex">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias eligendi quidem quis autem a dicta,
+                    totam voluptatibus eveniet veritatis, maiores iusto quam pariatur impedit officiis et, consectetur
+                    id adipisci tempore? Eveniet molestias odit labore beatae dolores officiis atque fugiat nam
+                    exercitationem impedit ut earum, necessitatibus provident suscipit quasi pariatur accusamus cum
+                    alias harum. Consequatur provident, neque numquam quae qui repellat ex quo expedita alias nisi
+                    veniam aliquid adipisci sapiente blanditiis enim tempora sed fugiat vel at! Expedita ullam
+                    voluptatum dolor.</p>
+            </div>
+            <hr>
         </div>
 
         <div class="add-task flex">
             <div>
-                <input type="text" maxlength="300" id="add-task-input" placeholder="Add new task">
+                <input type="text" maxlength="300" id="add-task-input" placeholder="add new task">
                 <p id="chars"></p>
+                <hr>
             </div>
         </div>
 
-        <div id="tasks" class="flex">
-            <div class="task-list flex">
-                <h2 id="task-count">
-
-                </h2>
+        <div class="task-list flex">
+            <div id="tasks" class="flex">
+                <div id="task-count" class="flex">
+                    <h2>
+                        You have 1 task
+                    </h2>
+                </div>
+                <section class="task">
+                    <div class="task-info">
+                        <p class="task-sessions">Sessions: <span class="session-count">1</span></p>
+                        <p class="task-duration">25:00</p>
+                        <div class="add-sub flex">
+                            <button class="add">add session</button>
+                            <button class="subtract">sub session</button>
+                        </div>
+                        <div class="done-delete flex">
+                            <button class="done">done</button>
+                            <button class="delete">delete</button>
+                        </div>
+                    </div>
+                    <div class="task-description flex">
+                        <p>hello</p>
+                    </div>
+                </section>
+                <section class="task">
+                    <div class="task-info">
+                        <p class="task-sessions">Sessions: <span class="session-count">1</span></p>
+                        <p class="task-duration">25:00</p>
+                        <div class="add-sub flex">
+                            <button class="add">add session</button>
+                            <button class="subtract">sub session</button>
+                        </div>
+                        <div class="done-delete flex">
+                            <button class="done">done</button>
+                            <button class="delete">delete</button>
+                        </div>
+                    </div>
+                    <div class="task-description flex">
+                        <p>hello</p>
+                    </div>
+                </section>
             </div>
         </div>
     </main>

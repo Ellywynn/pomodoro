@@ -14,42 +14,44 @@ let seconds = 0, minutes = 25, hours = 0;
 let timerID = 0;
 let taskCount = 0;
 
-calculateTasksCount();
-updateTimerText();
+//calculateTasksCount();
+//updateTimerText();
+
+startTimer();
 
 // TODO: включить случай строки без пробелов и переносов(разбить ее на части через каждые 50 символов)
 
-input.addEventListener('input', e => {
-    if (input.value === '') {
-        chars.textContent = '';
-        return;
-    }
+// input.addEventListener('input', e => {
+//     if (input.value === '') {
+//         chars.textContent = '';
+//         return;
+//     }
 
-    chars.textContent = input.value.length + '/' + input.getAttribute('maxlength');
-});
+//     chars.textContent = input.value.length + '/' + input.getAttribute('maxlength');
+// });
 
-input.addEventListener('keydown', e => {
-    if (e.keyCode === 13 && input.value !== '') {
-        createTask(input.value);
-        let count = calculateTasksCount();
-        if (count === 1) taskDescription.textContent = input.value;
-        input.value = '';
-        chars.textContent = '';
-    }
-});
+// input.addEventListener('keydown', e => {
+//     if (e.keyCode === 13 && input.value !== '') {
+//         createTask(input.value);
+//         let count = calculateTasksCount();
+//         if (count === 1) taskDescription.textContent = input.value;
+//         input.value = '';
+//         chars.textContent = '';
+//     }
+// });
 
-startTaskTimer.addEventListener('click', e => {
-    startTimer();
-});
+// startTaskTimer.addEventListener('click', e => {
+//     startTimer();
+// });
 
-pauseTaskTimer.addEventListener('click', e => {
-    pauseTimer();
-});
+// pauseTaskTimer.addEventListener('click', e => {
+//     pauseTimer();
+// });
 
-stopTaskTimer.addEventListener('click', e => {
-    let time = stopTimer();
-    console.log('Time: ' + time.hours + ':' + time.minutes + ':' + time.seconds);
-});
+// stopTaskTimer.addEventListener('click', e => {
+//     let time = stopTimer();
+//     console.log('Time: ' + time.hours + ':' + time.minutes + ':' + time.seconds);
+// });
 
 function createTask(text) {
     let section = document.createElement('section');
@@ -183,6 +185,7 @@ function createTask(text) {
     });
 
     tasks.appendChild(section);
+    console.log(section);
 }
 
 function calculateTasksCount() {
