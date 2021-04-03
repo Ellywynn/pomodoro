@@ -6,10 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Pomodoro App</title>
+    <title>pomodoro</title>
 </head>
 
 <body>
+
+    <div id="background" class="flex">
+        <video autoplay loop muted>
+            <source src="img/city.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="menu-button">
+        =
+    </div>
+
+    <aside class="menu">
+        <h2>some text</h2>
+    </aside>
 
     <header class="flex">
         <div class="flex">
@@ -18,43 +32,58 @@
     </header>
 
     <main>
-
-        <div class="current-task flex">
-            <div class="wrapper">
-                <div class="timer flex">
-                    <p id="time">25:00</p>
-                    <div class="timer-actions flex">
-                        <button id="start-timer">START</button>
-                        <button id="pause-timer">PAUSE</button>
-                        <button id="stop-timer">STOP</button>
-                    </div>
-                </div>
-                <div class="task-info">
-                    <div class="description flex">
-                        <h2 class="task-name">Task Description</h2>
-                    </div>
-                </div>
+        <div class="current-task">
+            <div class="time flex">
+                <p id="time">25:00</p>
             </div>
+            <div class="time-actions flex">
+                <button class="action start">start</button>
+                <button class="action pause">pause</button>
+                <button class="action stop">stop</button>
+                <button class="action done">done</button>
+                <button class="action delete">delete</button>
+            </div>
+            <div class="current-task-info">
+                <span class="info">sessions: <span class="current-count"></span>1</span>
+                <span class="info">total: <span class="current-total">25:00</span></span>
+                <span class="info">remaining: <span class="current-remaining">25:00</span></span>
+            </div>
+            <hr>
+            <div class="description flex">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias eligendi quidem quis autem a dicta,
+                    totam voluptatibus eveniet veritatis, maiores iusto quam pariatur impedit officiis et, consectetur
+                    id adipisci tempore? Eveniet molestias odit labore beatae dolores officiis atque fugiat nam
+                    exercitationem impedit ut earum, necessitatibus provident suscipit quasi pariatur accusamus cum
+                    alias harum. Consequatur provident, neque numquam quae qui repellat ex quo expedita alias nisi
+                    veniam aliquid adipisci sapiente blanditiis enim tempora sed fugiat vel at! Expedita ullam
+                    voluptatum dolor.</p>
+
+            </div>
+            <hr id="description-line">
         </div>
 
         <div class="add-task flex">
             <div>
-                <input type="text" maxlength="300" id="add-task-input" placeholder="Add new task">
+                <input type="text" maxlength="300" id="add-task-input" placeholder="add new task">
                 <p id="chars"></p>
             </div>
         </div>
 
-        <div id="tasks" class="flex">
-            <div class="task-list flex">
-                <h2 id="task-count">
+        <div class="task-list flex">
+            <div id="tasks" class="flex">
+                <div id="task-count" class="flex">
+                    <h2>
 
-                </h2>
+                    </h2>
+                </div>
+
+
             </div>
         </div>
     </main>
 
     <footer class="flex">
-        <h3>Ellywynn &copy2021</h3>
+        <a href="https://github.com/Ellywynn" target="_blank">Ellywynn &copy2021</a>
     </footer>
 
     <!-- jQuery -->
