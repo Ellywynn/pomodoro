@@ -24,6 +24,11 @@ function init() {
             e.stopPropagation();
             $('.menu-button,.menu').toggleClass('active');
         });
+
+        $('#settings').click(e => {
+            $('.menu-action.settings').toggleClass('visible');
+        });
+
         $('header,main,footer').click(e => {
             if ($('.menu-button').hasClass('active')) {
                 $('.menu-button,.menu').toggleClass('active');

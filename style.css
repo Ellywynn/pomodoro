@@ -52,7 +52,6 @@ header > div > h1{
     font-weight: 500;
     color: var(--main-text-color);
     letter-spacing: 40px;
-    letter-spacing: normal;
 }
 
 main{
@@ -141,7 +140,7 @@ button:active{
 }
 
 .menu-button .burger{
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
 }
 
 .menu-button.active .first{
@@ -187,6 +186,20 @@ button:active{
     height: 50px;
     background-color: green;
     margin: 2px 0;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.menu-action.name{
+    cursor: pointer;
+}
+
+.menu-action.settings{
+    display: none;
+}
+
+.menu-action.settings.visible{
+    display: flex;
 }
 
 .current-task{
