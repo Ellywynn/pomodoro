@@ -7,13 +7,16 @@ const currentTaskDescription = document.querySelector('.description p');
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
 
-let seconds = 0, minutes = 0, hours = 0;
+let seconds = 0, minutes = 200;
 let timerID = 0;
 let timerIsActive = false;
 
-init();
+let DEFAULT_SESSION = 25;
+let DEFAULT_BREAK = 5;
+let DEFAULT_LONG_BREAK = 30;
+let DEFAULT_BREAK_COUNT = 4;
 
-// TODO: включить случай строки без пробелов и переносов(разбить ее на части через каждые 50 символов)
+init();
 
 function init() {
     $(document).ready(() => {
@@ -75,21 +78,29 @@ function createTask(text) {
     let section = document.createElement('section');
     section.classList.add('task');
 
+    let total = document.createElement('p');
+    total.textContent = '00:00';
+    total.classList.add('total');
+    section.appendChild(total);
+
     let taskInfo = document.createElement('div');
     taskInfo.classList.add('task-info');
 
     let taskDuration = document.createElement('p');
     taskDuration.classList.add('task-duration');
-    taskDuration.textContent = '25:00';
+    taskDuration.textContent = DEFAULT_SESSION + ':00';
+    taskDuration.addEventListener('click', e => e.stopPropagation());
 
     let taskSessions = document.createElement('div');
     taskSessions.classList.add('task-sessions');
 
     let p = document.createElement('p');
     p.textContent = 'sessions: ';
+    p.addEventListener('click', e => e.stopPropagation());
     let sessionCount = document.createElement('span');
     sessionCount.classList.add('session-count');
-    sessionCount.textContent = '0';
+    sessionCount.textContent = '1';
+    sessionCount.addEventListener('click', e => e.stopPropagation());
     p.appendChild(sessionCount);
 
     let buttons1 = document.createElement('div');
@@ -101,6 +112,20 @@ function createTask(text) {
     subButton.classList.add('subtract');
     addButton.textContent = '+';
     subButton.textContent = '-';
+    addButton.addEventListener('click', e => {
+        e.stopPropagation();
+        let sessionsText = e.path[2].querySelector('.session-count').textContent;
+        let sessions = parseInt(sessionsText);
+        let timeElement = e.path[3].firstChild.textContent;
+        let timeText = timeElement.split(':');
+        let min = parseInt(timeText[0]);
+        let sec = parseInt(timeText[1]);
+        min += DEFAULT_SESSION;
+        sessions++;
+        e.path[2].querySelector('.session-count').textContent = sessions;
+        e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
+    });
+    subButton.addEventListener('click', e => e.stopPropagation());
     buttons1.appendChild(addButton);
     buttons1.appendChild(subButton);
 
@@ -129,6 +154,7 @@ function createTask(text) {
     taskDescription.classList.add('flex');
     let desc = document.createElement('p');
     desc.textContent = text;
+    desc.addEventListener('click', e => e.stopPropagation());
     taskDescription.appendChild(desc);
 
     section.appendChild(taskInfo);
@@ -139,6 +165,13 @@ function createTask(text) {
         stopTimer();
         setCurrentTaskDescription(e.currentTarget.querySelector('.task-description p').textContent);
         currentTask.scrollIntoView();
+        // get task time and reset global timer
+        let time = e.currentTarget.querySelector('.task-duration').textContent.split(':');
+        minutes = parseInt(time[0]);
+        seconds = parseInt(time[1]);
+
+        let totalSeconds = minutes * 60 + seconds;
+        // TODO: there.
         updateTimerText();
     });
 
@@ -148,7 +181,7 @@ function createTask(text) {
         let taskTime = time.textContent.split(':');
         minutes = parseInt(taskTime[0]);
         seconds = parseInt(taskTime[1]);
-        updateTimerText();
+        updateTimerText(taskTime);
     }
     tasks.appendChild(section);
     updateTaskList();
@@ -160,6 +193,8 @@ function calculateTasksCount() {
 }
 
 function startTimer() {
+    if (minutes <= 0 && seconds <= 0) return;
+
     updateTimerText();
     timerID = setInterval(updateTimer, 1000);
 }
@@ -171,12 +206,11 @@ function updateTimer() {
         seconds = 59;
     }
     if (minutes === -1) {
-        hours--;
         minutes = 59;
         seconds = 59;
     }
 
-    if (hours === 0 && minutes === 0 && seconds === 0)
+    if (minutes === 0 && seconds === 0)
         stopTimer();
     else
         updateTimerText();
@@ -184,10 +218,9 @@ function updateTimer() {
 
 function stopTimer() {
     clearInterval(timerID);
-    let time = { seconds: seconds, minutes: minutes, hours: hours };
+    let time = { seconds: seconds, minutes: minutes };
     seconds = 0;
     minutes = 0;
-    hours = 0;
     updateTimerText();
     return time;
 }
@@ -197,14 +230,11 @@ function pauseTimer() {
     updateTimerText();
 }
 
-function updateTimerText() {
+function updateTimerText(timer = timeText) {
     let str = '';
-    if (hours === 0)
-        str += formatTime(minutes) + ':' + formatTime(seconds);
-    else
-        str += formatTime(hours) + ':' + formatTime(minutes) + ':' + formatTime(seconds);
+    str += formatTime(minutes) + ':' + formatTime(seconds);
 
-    timeText.textContent = str;
+    timer.textContent = str;
 }
 
 function formatTime(time) {
