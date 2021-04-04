@@ -107,27 +107,84 @@ button:active{
 }
 
 .menu-button{
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    z-index: 3;
+    transition: all 1s ease;
+}
+
+.menu-button .burger{
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
     position: absolute;
-    left: 50px;
-    top: 10px;
-    background-color: white;
+    left: 0;
 }
 
 .menu-button:hover{
     cursor: pointer;
 }
 
+.menu-button .first{
+    top: 10;
+}
+.menu-button .second{
+    top: 20px;
+}
+.menu-button .third{
+    bottom: 10px;
+}
+
+.menu-button .burger{
+    transition: all 0.3s ease;
+}
+
+.menu-button.active .first{
+    transform: rotate(45deg);
+    top: 23px;
+}
+.menu-button.active .third{
+    transform: rotate(-45deg);
+    bottom: 23px;
+}
+.menu-button.active .second{
+    transform: scale(0);
+}
+
 .menu{
-    display: none;
-    width: 250px;
+    transition: all 400ms ease;
+    visibility: hidden;
+    min-width: 200px;
+    max-width: 0;
+    width: 60%;
     height: 100%;
-    background-color: #fff;
+    background-color: rgba(0,0,0,0.4);
+    color: var(--main-solid-color);
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 2;
+    transform: translateX(-100%);
+}
+
+.menu.active{
+    max-width: 300px;
+    visibility: visible;
+    transform: translateX(0px);
+}
+
+.menu .container{
+    margin-top: 90px;
+}
+
+.menu-action{
+    width: 100%;
+    height: 50px;
+    background-color: green;
+    margin: 2px 0;
 }
 
 .current-task{

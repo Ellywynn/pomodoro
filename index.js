@@ -7,29 +7,45 @@ const currentTaskDescription = document.querySelector('.description p');
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
 
-let seconds = 5, minutes = 0, hours = 0;
+let seconds = 0, minutes = 0, hours = 0;
 let timerID = 0;
-
-document.querySelector('.menu-button').addEventListener('click', e => {
-    document.querySelector('.menu').style = "display: block;";
-});
+let timerIsActive = false;
 
 init();
 
 // TODO: включить случай строки без пробелов и переносов(разбить ее на части через каждые 50 символов)
 
 function init() {
+    $(document).ready(() => {
+        $('.menu-button').click(e => {
+            e.stopPropagation();
+            $('.menu-button,.menu').toggleClass('active');
+        });
+        console.log($('main'));
+        $('header,main,footer').click(e => {
+            if ($('.menu-button').hasClass('active')) {
+                $('.menu-button,.menu').toggleClass('active');
+            }
+        });
+    });
+
     const input = document.querySelector('#add-task-input');
     const startTaskTimer = document.querySelector('.action.start');
     const pauseTaskTimer = document.querySelector('.action.pause');
     const stopTaskTimer = document.querySelector('.action.stop');
 
     startTaskTimer.addEventListener('click', e => {
-        startTimer();
+        if (!timerIsActive) {
+            startTimer();
+            timerIsActive = true;
+        }
     });
 
     pauseTaskTimer.addEventListener('click', e => {
-        pauseTimer();
+        if (timerIsActive) {
+            pauseTimer();
+            timerIsActive = false;
+        }
     });
 
     stopTaskTimer.addEventListener('click', e => {
@@ -171,7 +187,7 @@ function stopTimer() {
     clearInterval(timerID);
     let time = { seconds: seconds, minutes: minutes, hours: hours };
     seconds = 0;
-    minutes = 25;
+    minutes = 0;
     hours = 0;
     updateTimerText();
     return time;
