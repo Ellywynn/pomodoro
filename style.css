@@ -51,6 +51,7 @@ header > div > h1{
     font-weight: 500;
     color: var(--main-text-color);
     letter-spacing: 40px;
+    letter-spacing: normal;
 }
 
 main{

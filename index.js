@@ -21,7 +21,6 @@ function init() {
             e.stopPropagation();
             $('.menu-button,.menu').toggleClass('active');
         });
-        console.log($('main'));
         $('header,main,footer').click(e => {
             if ($('.menu-button').hasClass('active')) {
                 $('.menu-button,.menu').toggleClass('active');
