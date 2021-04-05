@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Pomodoro App</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title id="title">pomodoro</title>
 </head>
 
 <body>
@@ -14,11 +15,66 @@
         <source src="img/street.mp4" type="video/mp4">
     </video>
 
-    <header class="flex">
-        <div class="flex">
-            <h1>POMODORO</h1>
+    <div id="background" class="flex">
+        <video autoplay loop muted>
+            <source src="img/home.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="menu-button">
+        <div class="burger first"></div>
+        <div class="burger second"></div>
+        <div class="burger third"></div>
+    </div>
+
+    <aside class="menu">
+        <div class="container">
+            <div id="settings" class="menu-action">
+                <p class="flex">settings</p>
+                <div class="inner settings flex">
+                    <span>session duration: <input type="text" value="25"></span>
+                </div>
+                <div class="inner settings flex">
+                    <span>long break session: <input type="text" value="4"></span>
+                </div>
+                <div class="inner settings flex">
+                    <span>short break duration: <input type="text" value="5"></span>
+                </div>
+                <div class="inner settings flex">
+                    <span>long break duration: <input type="text" value="30"></span>
+                </div>
+            </div>
+            <div id="music" class="menu-action">
+                <p class="flex">music</p>
+                <div class="inner music flex">
+                    <span>audio here</span>
+                </div>
+                <div class="inner music flex">
+                    <span>audio here</span>
+                </div>
+            </div>
+            <div id="backgrounds" class="menu-action">
+                <p class="flex">backgrounds</p>
+                <div class="inner backgrounds flex">
+                    <span>bg here</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <span>bg here</span>
+                </div>
+            </div>
+            <hr>
+            <div class="description flex">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias eligendi quidem quis autem a dicta,
+                    totam voluptatibus eveniet veritatis, maiores iusto quam pariatur impedit officiis et, consectetur
+                    id adipisci tempore? Eveniet molestias odit labore beatae dolores officiis atque fugiat nam
+                    exercitationem impedit ut earum, necessitatibus provident suscipit quasi pariatur accusamus cum
+                    alias harum. Consequatur provident, neque numquam quae qui repellat ex quo expedita alias nisi
+                    veniam aliquid adipisci sapiente blanditiis enim tempora sed fugiat vel at! Expedita ullam
+                    voluptatum dolor.</p>
+            </div>
+            <hr>
         </div>
-    </header>
+    </aside>
 
     <main>
         <div class="current-task">
@@ -33,9 +89,9 @@
                 <button class="action delete">delete</button>
             </div>
             <div class="current-task-info">
-                <span>Sessions: 1</span>
-                <span>Total: 25:00</span>
-                <span>Remaining: 25:00</span>
+                <span class="info sessions">sessions: <span class="current-count">1</span></span>
+                <span class="info total">total: <span class="current-total">25:00</span></span>
+                <span class="info remaining">remaining: <span class="current-remaining">25:00</span></span>
             </div>
             <hr>
             <div class="description flex">
@@ -46,8 +102,9 @@
                     alias harum. Consequatur provident, neque numquam quae qui repellat ex quo expedita alias nisi
                     veniam aliquid adipisci sapiente blanditiis enim tempora sed fugiat vel at! Expedita ullam
                     voluptatum dolor.</p>
+
             </div>
-            <hr>
+            <hr id="description-line">
         </div>
 
         <div class="add-task flex">
@@ -62,51 +119,17 @@
             <div id="tasks" class="flex">
                 <div id="task-count" class="flex">
                     <h2>
-                        You have 1 task
+
                     </h2>
                 </div>
 
-                <section class="task">
-                    <div class="task-info">
-                        <p class="task-sessions">Sessions: <span class="session-count">1</span></p>
-                        <p class="task-duration">25:00</p>
-                        <div class="add-sub flex">
-                            <button class="add">add session</button>
-                            <button class="subtract">sub session</button>
-                        </div>
-                        <div class="done-delete flex">
-                            <button class="done">done</button>
-                            <button class="delete">delete</button>
-                        </div>
-                    </div>
-                    <div class="task-description flex">
-                        <p>hello</p>
-                    </div>
-                </section>
 
-                <section class="task">
-                    <div class="task-info">
-                        <p class="task-sessions">Sessions: <span class="session-count">1</span></p>
-                        <p class="task-duration">25:00</p>
-                        <div class="add-sub flex">
-                            <button class="add">add session</button>
-                            <button class="subtract">sub session</button>
-                        </div>
-                        <div class="done-delete flex">
-                            <button class="done">done</button>
-                            <button class="delete">delete</button>
-                        </div>
-                    </div>
-                    <div class="task-description flex">
-                        <p>hello</p>
-                    </div>
-                </section>
             </div>
         </div>
     </main>
 
     <footer class="flex">
-        <h3>Ellywynn &copy2021</h3>
+        <a href="https://github.com/Ellywynn" target="_blank">ellywynn &copy2021</a>
     </footer>
 
     <!-- jQuery -->
