@@ -7,23 +7,29 @@ const currentTaskDescription = document.querySelector('.description p');
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
 
-let seconds = 50, minutes = 0;
-let timerID = 0;
-let timerIsActive = false;
-
 let DEFAULT_SESSION = 22;
 let DEFAULT_BREAK = 5;
 let DEFAULT_LONG_BREAK = 30;
 let DEFAULT_BREAK_COUNT = 4;
 
+let seconds = 0, minutes = DEFAULT_SESSION;
+let timerID = 0;
+let timerIsActive = false;
+
 init();
 
 function init() {
+    initMenu();
+    initElements();
+    updateCurrentTask();
+}
+
+function initMenu() {
     $(document).ready(() => {
         $('.menu-button').click(e => {
             e.stopPropagation();
             $('.menu-button,.menu').toggleClass('active');
-            $('.menu-action').removeClass('visible');
+            $('.inner').removeClass('visible');
         });
 
         $('#settings p').click(e => {
@@ -31,51 +37,34 @@ function init() {
             $('.menu-action .settings').toggleClass('visible');
         });
 
-        $('#music').click(e => {
-            $('.menu-action.music').toggleClass('visible');
+        $('#music p').click(e => {
+            $('#music').css('height', '100%')
+            $('.menu-action .music').toggleClass('visible');
         });
 
-        $('#backgrounds').click(e => {
-            $('.menu-action.backgrounds').toggleClass('visible');
+        $('#backgrounds p').click(e => {
+            $('#backgrounds').css('height', '100%')
+            $('.menu-action .backgrounds').toggleClass('visible');
         });
 
         $('header,main,footer').click(e => {
             if ($('.menu-button').hasClass('active')) {
                 $('.menu-button,.menu').toggleClass('active');
-                $('.menu-action').removeClass('visible');
+                $('.inner').removeClass('visible');
             }
         });
-
-        // $('.menu').hover(() => {
-        //     $('body').css('overflow', 'scroll');
-        // }, () => {
-        //     $('body').css('overflow', 'auto');
-        // })
     });
+}
 
+function initElements() {
     const input = document.querySelector('#add-task-input');
     const startTaskTimer = document.querySelector('.action.start');
     const pauseTaskTimer = document.querySelector('.action.pause');
     const stopTaskTimer = document.querySelector('.action.stop');
 
-    startTaskTimer.addEventListener('click', e => {
-        if (!timerIsActive) {
-            startTimer();
-            timerIsActive = true;
-        }
-    });
-
-    pauseTaskTimer.addEventListener('click', e => {
-        if (timerIsActive) {
-            pauseTimer();
-            timerIsActive = false;
-        }
-    });
-
-    stopTaskTimer.addEventListener('click', e => {
-        stopCurrentSession();
-        stopTimer();
-    });
+    startTaskTimer.addEventListener('click', e => startTimer());
+    pauseTaskTimer.addEventListener('click', e => pauseTimer());
+    stopTaskTimer.addEventListener('click', e => stopTimer());
 
     input.addEventListener('input', e => {
         if (input.value === '') {
@@ -93,8 +82,6 @@ function init() {
         input.value = '';
         chars.textContent = '';
     });
-
-    updateCurrentTask();
 }
 
 function createTask(text) {
@@ -174,36 +161,38 @@ function createTask(text) {
     section.appendChild(taskInfo);
     section.appendChild(taskDescription);
 
+    // when users click on the task
     section.addEventListener('click', e => {
         e.stopPropagation();
-        stopTimer();
+        // remove the current class from current task
+        // add it to the clicked task
         $('.current').removeClass('current');
         e.currentTarget.classList.add('current');
+
         setCurrentTaskDescription(e.currentTarget.querySelector('.task-description p').textContent);
         currentTask.scrollIntoView();
         // get task time and reset global timer
         let time = e.currentTarget.querySelector('.task-duration').textContent.split(':');
         let min = parseInt(time[0]);
         let sec = parseInt(time[1]);
+        let sessCount = parseInt(e.currentTarget.querySelector('.session-count').textContent);
         if (min > DEFAULT_SESSION) {
-            min = DEFAULT_SESSION;
+            min = Math.floor(min / sessCount);
             sec = 0;
         }
         minutes = min;
         seconds = sec;
-        $('.current-task .current-count').text(e.currentTarget.querySelector('.session-count').textContent);
+        $('.current-task .current-count').text(sessCount);
         $('.current-task .current-total').text(e.currentTarget.querySelector('.total').textContent);
         updateTimerText();
     });
 
+    // if this is the first task, set it to the current task
     if (calculateTasksCount() === 0) {
         displayTaskDescription();
         setCurrentTaskDescription(text);
+        updateTimerText(time.textContent);
         document.querySelector('#add-task-input').scrollIntoView();
-        let taskTime = time.textContent.split(':');
-        minutes = parseInt(taskTime[0]);
-        seconds = parseInt(taskTime[1]);
-        updateTimerText(taskTime);
         section.classList.add('current');
     }
     tasks.appendChild(section);
@@ -216,10 +205,13 @@ function calculateTasksCount() {
 }
 
 function startTimer() {
-    if (minutes <= 0 && seconds <= 0) return;
+    if (timerIsActive) return;
+    if (minutes < 0 && seconds < 0) return;
+    if (minutes === 0 && seconds === 0) minutes = DEFAULT_SESSION;
 
     updateTimerText();
     timerID = setInterval(updateTimer, 1000);
+    timerIsActive = true;
 }
 
 function updateTimer() {
@@ -233,45 +225,55 @@ function updateTimer() {
         seconds = 59;
     }
 
-    if (minutes === 0 && seconds === 0)
+    if (minutes === 0 && seconds === 0) {
         stopTimer();
+        alert('take a break!');
+    }
     else
         updateTimerText();
-
-    updateRemainingText();
 }
 
 function stopTimer() {
+    stopCurrentSession();
     clearInterval(timerID);
-    seconds = 0;
-    minutes = 0;
+    resetTime();
     updateTimerText();
+    resetTitle();
+    timerIsActive = false;
 }
 
 function pauseTimer() {
+    if (!timerIsActive) return;
     clearInterval(timerID);
     updateTimerText();
+    timerIsActive = false;
 }
 
 function updateTimerText(timer = timeText) {
     let str = '';
-    str += formatTime(minutes) + ':' + formatTime(seconds);
+    str += formatTimeText(minutes, seconds);
 
     timer.textContent = str;
     updateRemainingText();
+    updateTitleTime();
 }
 
 function updateRemainingText() {
-    let sessCount = parseInt($('.current-task .current-count').text());
-    let min = sessCount * DEFAULT_SESSION + minutes;
+    let sessCount = getSessionCount();
+    let min = (sessCount - 1) * DEFAULT_SESSION
+        + (minutes === 0 ? DEFAULT_SESSION : minutes);
     let sec = seconds;
-    $('.current-task .current-remaining').text(formatTime(min) + ':' + formatTime(sec));
+    $('.current-task .current-remaining').text(formatTimeText(min, sec));
 }
 
 function formatTime(time) {
     if (time < 0) return 0;
     if (time < 10) return '0' + time;
     return time;
+}
+
+function formatTimeText(minutes, seconds) {
+    return formatTime(minutes) + ':' + formatTime(seconds);
 }
 
 function hideCurrentTaskDescription() {
@@ -285,8 +287,7 @@ function displayTaskDescription() {
 }
 
 function updateCurrentTask() {
-    let count = calculateTasksCount();
-    if (count === 0) {
+    if (calculateTasksCount() === 0) {
         currentTaskDescription.textContent = '';
         hideCurrentTaskDescription();
         return;
@@ -304,10 +305,6 @@ function setCurrentTaskDescription(text) {
     currentTaskDescription.textContent = text;
 }
 
-function blinkSemicolon() {
-    let counter = 0.0;
-}
-
 function addSession(e) {
     e.stopPropagation();
     changeSessions(e, true);
@@ -323,7 +320,7 @@ function getTaskSessions(event) {
 }
 
 function getTaskTimeAsObject(e) {
-    let time = e.path[3].firstChild.textContent.split(':');
+    let time = getTaskTime(e).split(':');
     return { min: parseInt(time[0]), sec: parseInt(time[1]) };
 }
 
@@ -333,10 +330,10 @@ let setTaskSessionText = (e, text) =>
     e.path[2].querySelector('.session-count').textContent = text;
 
 let setTaskTimerTime = (e, min, sec) =>
-    e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
+    e.path[3].firstChild.textContent = formatTimeText(min, sec);
 
 let setTaskTotalText = (e) =>
-    e.path[4].querySelector('.total').textContent = e.path[3].firstChild.textContent;
+    e.path[4].querySelector('.total').textContent = getTaskTime(e);
 
 function changeSessions(e, isAdding) {
     let sessions = getTaskSessions(e);
@@ -358,17 +355,46 @@ function changeSessions(e, isAdding) {
 }
 
 function stopCurrentSession() {
-    // current active task
-    let current = document.querySelector('.current');
-    let remainSessions = parseInt(currentTask.querySelector('.current-count').textContent) - 1;
-
-    let totalTime = formatTime(minutes + remainSessions * DEFAULT_SESSION) + ':' + formatTime(seconds);
-    currentTask.querySelector('.current-count').textContent = remainSessions;
-    currentTask.querySelector('.current-remaining').textContent = totalTime;
-    current.querySelector('.session-count').textContent = remainSessions;
-    current.querySelector('.task-duration').textContent = totalTime;
+    let remaining = getRemainingTime();
+    if (remaining.minutes !== 0 && remaining.seconds !== 0) decrementTaskSession();
+    resetTime();
+    saveCurrentTask();
 }
 
+// updates the current task in the task list
 function saveCurrentTask() {
+    let remainSessions = getSessionCount();
+    let remainTime = formatTimeText(remainSessions * DEFAULT_SESSION, seconds);
+    $('.current-task .current-count').text(remainSessions);
+    $('.current-task .current-remaining').text(remainTime);
+    $('.current .session-count').text(remainSessions);
+    $('.current .task-duration').text(remainTime);
+}
 
+function resetTime() {
+    minutes = 0;
+    seconds = 0;
+}
+
+function decrementTaskSession() {
+    $('.current-task .current-count').text(getSessionCount() - 1);
+}
+
+function getSessionCount() {
+    return parseInt($('.current-task .current-count').text());
+}
+
+function getRemainingTime() {
+    let time = $('.current-task .current-remaining').text().split(':');
+    return { minutes: parseInt(time[0]), seconds: parseInt(time[1]) };
+}
+
+function updateTitleTime() {
+    let task = $('.current-task .description p').text();
+    let taskSubstr = task.length > 15 ? task.substring(0, 15) : task.substring(0, task.length);
+    $('#title').text($('#time').text() + ' - ' + taskSubstr);
+}
+
+function resetTitle() {
+    $('#title').text('pomodoro');
 }
