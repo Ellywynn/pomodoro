@@ -23,15 +23,25 @@ function init() {
         $('.menu-button').click(e => {
             e.stopPropagation();
             $('.menu-button,.menu').toggleClass('active');
+            $('.menu-action').removeClass('visible');
         });
 
         $('#settings').click(e => {
             $('.menu-action.settings').toggleClass('visible');
         });
 
+        $('#music').click(e => {
+            $('.menu-action.music').toggleClass('visible');
+        });
+
+        $('#backgrounds').click(e => {
+            $('.menu-action.backgrounds').toggleClass('visible');
+        });
+
         $('header,main,footer').click(e => {
             if ($('.menu-button').hasClass('active')) {
                 $('.menu-button,.menu').toggleClass('active');
+                $('.menu-action').removeClass('visible');
             }
         });
     });
@@ -84,7 +94,7 @@ function createTask(text) {
     section.classList.add('task');
 
     let total = document.createElement('p');
-    total.textContent = '00:00';
+    total.textContent = DEFAULT_SESSION + ':00';
     total.classList.add('total');
     section.appendChild(total);
 
@@ -129,8 +139,24 @@ function createTask(text) {
         sessions++;
         e.path[2].querySelector('.session-count').textContent = sessions;
         e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
+        e.path[4].querySelector('.total').textContent = e.path[3].firstChild.textContent;
     });
-    subButton.addEventListener('click', e => e.stopPropagation());
+    subButton.addEventListener('click', e => {
+        e.stopPropagation();
+        let sessionsText = e.path[2].querySelector('.session-count').textContent;
+        let sessions = parseInt(sessionsText);
+        let timeElement = e.path[3].firstChild.textContent;
+        let timeText = timeElement.split(':');
+        let min = parseInt(timeText[0]);
+        let sec = parseInt(timeText[1]);
+
+        if (min <= DEFAULT_SESSION) return;
+
+        min -= DEFAULT_SESSION;
+        sessions--;
+        e.path[2].querySelector('.session-count').textContent = sessions;
+        e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
+    });
     buttons1.appendChild(addButton);
     buttons1.appendChild(subButton);
 
@@ -146,6 +172,9 @@ function createTask(text) {
     let deleteButton = document.createElement('button');
     deleteButton.classList.add('delete');
     deleteButton.textContent = 'delete';
+
+    doneButton.addEventListener('click', e => e.stopPropagation());
+    deleteButton.addEventListener('click', e => e.stopPropagation());
 
     buttons2.appendChild(doneButton);
     buttons2.appendChild(deleteButton);
@@ -168,15 +197,22 @@ function createTask(text) {
     section.addEventListener('click', e => {
         e.stopPropagation();
         stopTimer();
+        $('.current').removeClass('current');
+        e.currentTarget.classList.add('current');
         setCurrentTaskDescription(e.currentTarget.querySelector('.task-description p').textContent);
         currentTask.scrollIntoView();
         // get task time and reset global timer
         let time = e.currentTarget.querySelector('.task-duration').textContent.split(':');
-        minutes = parseInt(time[0]);
-        seconds = parseInt(time[1]);
-
-        let totalSeconds = minutes * 60 + seconds;
-        // TODO: there.
+        let min = parseInt(time[0]);
+        let sec = parseInt(time[1]);
+        if (min > DEFAULT_SESSION) {
+            min = DEFAULT_SESSION;
+            sec = 0;
+        }
+        minutes = min;
+        seconds = sec;
+        $('.current-task .current-count').text(e.currentTarget.querySelector('.session-count').textContent);
+        $('.current-task .current-total').text(e.currentTarget.querySelector('.total').textContent);
         updateTimerText();
     });
 
@@ -187,6 +223,7 @@ function createTask(text) {
         minutes = parseInt(taskTime[0]);
         seconds = parseInt(taskTime[1]);
         updateTimerText(taskTime);
+        section.classList.add('current');
     }
     tasks.appendChild(section);
     updateTaskList();

@@ -183,23 +183,40 @@ button:active{
 
 .menu-action{
     width: 100%;
-    height: 50px;
+    min-height: 50px;
     background-color: green;
     margin: 2px 0;
     color: #fff;
     transition: all 0.3s ease;
 }
 
+.menu-action:hover{
+    transition: all 0.4s ease;
+    background-color: red;
+}
+
 .menu-action.name{
     cursor: pointer;
 }
 
-.menu-action.settings{
-    display: none;
+.current{
+    background-color: red;
 }
 
-.menu-action.settings.visible{
-    display: flex;
+.menu-action.inner{
+    min-height: 0px;
+    height: 0px;
+    opacity: 0;
+    visibility: hidden;
+    margin: 0px;
+}
+
+.menu-action.inner.visible{
+    min-height: 50px;
+    height: auto;
+    margin: 2px 0;
+    opacity: 1;
+    visibility: visible;
 }
 
 .current-task{
@@ -224,11 +241,11 @@ button:active{
     width: 100%;
     margin: 15px 0;
     padding: 15px;
+    transition: all 550ms;
 }
 
 .description:hover{
     background-color: rgba(0,0,0,0.7);
-    transition: all 550ms;
 }
 
 .description p{
@@ -332,6 +349,7 @@ button:active{
     display: flex;
     align-items: center;
     border: 3px solid var(--main-solid-color);
+    border-radius: 20px;
     color: var(--main-text-color);
     margin: 15px 0;
     transition: all 400ms;
