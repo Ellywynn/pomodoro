@@ -169,6 +169,7 @@ button:active{
     left: 0;
     z-index: 2;
     transform: translateX(-100%);
+    overflow: auto;
 }
 
 .menu.active{
@@ -182,41 +183,58 @@ button:active{
 }
 
 .menu-action{
+    height: 50px;
+}
+.menu-action p{
     width: 100%;
-    min-height: 50px;
-    background-color: green;
-    margin: 2px 0;
-    color: #fff;
-    transition: all 0.3s ease;
+    height: 50px;
+    background-color: yellow;
 }
 
-.menu-action:hover{
+
+.menu-action p:hover{
     transition: all 0.4s ease;
     background-color: red;
 }
 
-.menu-action.name{
+.menu-action{
     cursor: pointer;
 }
 
-.current{
-    background-color: red;
-}
-
-.menu-action.inner{
+.menu-action .inner{
+    transition: all 0.3s ease;
+    width: 100%;
     min-height: 0px;
     height: 0px;
     opacity: 0;
     visibility: hidden;
     margin: 0px;
+    background-color: green;
+    color: #fff;
 }
 
-.menu-action.inner.visible{
+.menu-action .inner.visible{
     min-height: 50px;
     height: auto;
     margin: 2px 0;
     opacity: 1;
     visibility: visible;
+}
+
+.inner input{
+    transition: all 0.5s ease;
+    width: 0px;
+    min-height: 0px;
+    height: 0px;
+    opacity: 0;
+    text-align: end;
+}
+
+.inner.visible input{
+    width: 50px;
+    min-height: 100%;
+    height: 80%;
+    opacity: 1;
 }
 
 .current-task{
@@ -367,6 +385,12 @@ button:active{
 
 .task .total{
     visibility: hidden;
+}
+
+.current{
+    background-color: rgba(0,0,0,0.5);
+    color: var(--main-solid-color);
+    border-color: rgba(0,0,0,0.7);
 }
 
 .task-info{

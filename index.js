@@ -7,11 +7,11 @@ const currentTaskDescription = document.querySelector('.description p');
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
 
-let seconds = 0, minutes = 200;
+let seconds = 50, minutes = 0;
 let timerID = 0;
 let timerIsActive = false;
 
-let DEFAULT_SESSION = 25;
+let DEFAULT_SESSION = 22;
 let DEFAULT_BREAK = 5;
 let DEFAULT_LONG_BREAK = 30;
 let DEFAULT_BREAK_COUNT = 4;
@@ -26,8 +26,9 @@ function init() {
             $('.menu-action').removeClass('visible');
         });
 
-        $('#settings').click(e => {
-            $('.menu-action.settings').toggleClass('visible');
+        $('#settings p').click(e => {
+            $('#settings').css('height', '100%');
+            $('.menu-action .settings').toggleClass('visible');
         });
 
         $('#music').click(e => {
@@ -44,6 +45,12 @@ function init() {
                 $('.menu-action').removeClass('visible');
             }
         });
+
+        // $('.menu').hover(() => {
+        //     $('body').css('overflow', 'scroll');
+        // }, () => {
+        //     $('body').css('overflow', 'auto');
+        // })
     });
 
     const input = document.querySelector('#add-task-input');
@@ -66,7 +73,8 @@ function init() {
     });
 
     stopTaskTimer.addEventListener('click', e => {
-        let time = stopTimer();
+        stopCurrentSession();
+        stopTimer();
     });
 
     input.addEventListener('input', e => {
@@ -127,36 +135,8 @@ function createTask(text) {
     subButton.classList.add('subtract');
     addButton.textContent = '+';
     subButton.textContent = '-';
-    addButton.addEventListener('click', e => {
-        e.stopPropagation();
-        let sessionsText = e.path[2].querySelector('.session-count').textContent;
-        let sessions = parseInt(sessionsText);
-        let timeElement = e.path[3].firstChild.textContent;
-        let timeText = timeElement.split(':');
-        let min = parseInt(timeText[0]);
-        let sec = parseInt(timeText[1]);
-        min += DEFAULT_SESSION;
-        sessions++;
-        e.path[2].querySelector('.session-count').textContent = sessions;
-        e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
-        e.path[4].querySelector('.total').textContent = e.path[3].firstChild.textContent;
-    });
-    subButton.addEventListener('click', e => {
-        e.stopPropagation();
-        let sessionsText = e.path[2].querySelector('.session-count').textContent;
-        let sessions = parseInt(sessionsText);
-        let timeElement = e.path[3].firstChild.textContent;
-        let timeText = timeElement.split(':');
-        let min = parseInt(timeText[0]);
-        let sec = parseInt(timeText[1]);
-
-        if (min <= DEFAULT_SESSION) return;
-
-        min -= DEFAULT_SESSION;
-        sessions--;
-        e.path[2].querySelector('.session-count').textContent = sessions;
-        e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
-    });
+    addButton.addEventListener('click', addSession);
+    subButton.addEventListener('click', removeSession);
     buttons1.appendChild(addButton);
     buttons1.appendChild(subButton);
 
@@ -219,6 +199,7 @@ function createTask(text) {
     if (calculateTasksCount() === 0) {
         displayTaskDescription();
         setCurrentTaskDescription(text);
+        document.querySelector('#add-task-input').scrollIntoView();
         let taskTime = time.textContent.split(':');
         minutes = parseInt(taskTime[0]);
         seconds = parseInt(taskTime[1]);
@@ -256,15 +237,15 @@ function updateTimer() {
         stopTimer();
     else
         updateTimerText();
+
+    updateRemainingText();
 }
 
 function stopTimer() {
     clearInterval(timerID);
-    let time = { seconds: seconds, minutes: minutes };
     seconds = 0;
     minutes = 0;
     updateTimerText();
-    return time;
 }
 
 function pauseTimer() {
@@ -277,6 +258,14 @@ function updateTimerText(timer = timeText) {
     str += formatTime(minutes) + ':' + formatTime(seconds);
 
     timer.textContent = str;
+    updateRemainingText();
+}
+
+function updateRemainingText() {
+    let sessCount = parseInt($('.current-task .current-count').text());
+    let min = sessCount * DEFAULT_SESSION + minutes;
+    let sec = seconds;
+    $('.current-task .current-remaining').text(formatTime(min) + ':' + formatTime(sec));
 }
 
 function formatTime(time) {
@@ -317,4 +306,69 @@ function setCurrentTaskDescription(text) {
 
 function blinkSemicolon() {
     let counter = 0.0;
+}
+
+function addSession(e) {
+    e.stopPropagation();
+    changeSessions(e, true);
+}
+
+function removeSession(e) {
+    e.stopPropagation();
+    changeSessions(e, false);
+}
+
+function getTaskSessions(event) {
+    return parseInt(event.path[2].querySelector('.session-count').textContent);
+}
+
+function getTaskTimeAsObject(e) {
+    let time = e.path[3].firstChild.textContent.split(':');
+    return { min: parseInt(time[0]), sec: parseInt(time[1]) };
+}
+
+let getTaskTime = (e) => e.path[3].firstChild.textContent;
+
+let setTaskSessionText = (e, text) =>
+    e.path[2].querySelector('.session-count').textContent = text;
+
+let setTaskTimerTime = (e, min, sec) =>
+    e.path[3].firstChild.textContent = formatTime(min) + ':' + formatTime(sec);
+
+let setTaskTotalText = (e) =>
+    e.path[4].querySelector('.total').textContent = e.path[3].firstChild.textContent;
+
+function changeSessions(e, isAdding) {
+    let sessions = getTaskSessions(e);
+    let time = getTaskTimeAsObject(e);
+
+    if (isAdding) {
+        if (sessions >= 10) return;
+        time.min += DEFAULT_SESSION;
+        sessions++;
+    } else {
+        if (time.min <= DEFAULT_SESSION) return;
+        time.min -= DEFAULT_SESSION;
+        sessions--;
+    }
+
+    setTaskSessionText(e, sessions);
+    setTaskTimerTime(e, time.min, time.sec);
+    setTaskTotalText(e);
+}
+
+function stopCurrentSession() {
+    // current active task
+    let current = document.querySelector('.current');
+    let remainSessions = parseInt(currentTask.querySelector('.current-count').textContent) - 1;
+
+    let totalTime = formatTime(minutes + remainSessions * DEFAULT_SESSION) + ':' + formatTime(seconds);
+    currentTask.querySelector('.current-count').textContent = remainSessions;
+    currentTask.querySelector('.current-remaining').textContent = totalTime;
+    current.querySelector('.session-count').textContent = remainSessions;
+    current.querySelector('.task-duration').textContent = totalTime;
+}
+
+function saveCurrentTask() {
+
 }
