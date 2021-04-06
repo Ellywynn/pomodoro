@@ -79,19 +79,15 @@ function initElements() {
 }
 
 function createTask(text) {
-    let section = document.createElement('section');
-    section.classList.add('task');
+    let section = createElement('section', 'task');
 
-    let total = document.createElement('p');
+    let total = createElement('p', 'total');
     total.textContent = DEFAULT_SESSION + ':00';
-    total.classList.add('total');
     section.appendChild(total);
 
-    let taskInfo = document.createElement('div');
-    taskInfo.classList.add('task-info');
+    let taskInfo = createElement('div', 'task-info');
 
-    let taskDuration = document.createElement('p');
-    taskDuration.classList.add('task-duration');
+    let taskDuration = createElement('p', 'task-duration');
     taskDuration.textContent = DEFAULT_SESSION + ':00';
     taskDuration.addEventListener('click', e => e.stopPropagation());
 
@@ -135,7 +131,7 @@ function createTask(text) {
     deleteButton.textContent = 'delete';
 
     doneButton.addEventListener('click', e => e.stopPropagation());
-    deleteButton.addEventListener('click', e => e.stopPropagation());
+    deleteButton.addEventListener('click', deleteTask);
 
     buttons2.appendChild(doneButton);
     buttons2.appendChild(deleteButton);
@@ -158,40 +154,21 @@ function createTask(text) {
     // when users click on the task
     section.addEventListener('click', e => {
         e.stopPropagation();
-        let target = e.currentTarget;
+        saveCurrentTask();
         // remove the current class from current task
         // add it to the clicked task
         $('.current').removeClass('current');
-        target.classList.add('current');
-
-        setCurrentTaskDescription(target.querySelector('.task-description p').textContent);
+        setCurrentTask(e.currentTarget);
         currentTask.scrollIntoView();
-        // get task time and reset global timer
-        let time = target.querySelector('.task-duration').textContent.split(':');
-        let min = parseInt(time[0]);
-        let sec = parseInt(time[1]);
-        let sessCount = parseInt(target.querySelector('.session-count').textContent);
-        if (min > DEFAULT_SESSION) {
-            min = Math.floor(min / sessCount);
-            sec = 0;
-        }
-        minutes = min;
-        seconds = sec;
-        setSessionCount(sessCount);
-        setCurrentTotal(target.querySelector('.total').textContent);
-        updateTimerText();
     });
 
     // if this is the first task, set it to the current task
     if (calculateTasksCount() === 0) {
         displayTaskDescription();
-        setCurrentTaskDescription(text);
-        updateTimerText();
-        setSessionCount(1);
-        setCurrentTotal(DEFAULT_SESSION);
         setRemainingText(formatTimeText(DEFAULT_SESSION, 0));
+        setCurrentTask(section);
+        currentTask.scrollIntoView();
         document.querySelector('#add-task-input').scrollIntoView();
-        section.classList.add('current');
     }
     document.querySelector('#tasks').appendChild(section);
     updateTaskList();
@@ -251,6 +228,7 @@ function pauseTimer() {
     if (!timerIsActive) return;
     clearInterval(timerID);
     updateTimerText();
+    saveCurrentTask();
     timerIsActive = false;
 }
 
@@ -258,7 +236,7 @@ function updateTimerText() {
     $('#time').text(formatTimeText(minutes, seconds));
     updateTitleTime();
 
-    if (!isBreakTime) updateRemainingText();
+    updateRemainingText();
 }
 
 function updateRemainingText() {
@@ -282,11 +260,13 @@ function formatTimeText(minutes, seconds) {
 function hideCurrentTaskDescription() {
     currentTask.hidden = true;
     taskList.hidden = true;
+    $('#task-count').hide();
 }
 
 function displayTaskDescription() {
     currentTask.hidden = false;
     taskList.hidden = false;
+    $('#task-count').show();
 }
 
 function updateCurrentTask() {
@@ -309,12 +289,10 @@ function setCurrentTaskDescription(text) {
 }
 
 function addSession(e) {
-    e.stopPropagation();
     changeSessions(e, true);
 }
 
 function removeSession(e) {
-    e.stopPropagation();
     changeSessions(e, false);
 }
 
@@ -339,6 +317,7 @@ let setTaskTotalText = (e) =>
     e.path[4].querySelector('.total').textContent = getTaskTime(e);
 
 function changeSessions(e, isAdding) {
+    e.stopPropagation();
     let sessions = getTaskSessions(e);
     let time = getTaskTimeAsObject(e);
 
@@ -355,6 +334,8 @@ function changeSessions(e, isAdding) {
     setTaskSessionText(e, sessions);
     setTaskTimerTime(e, time.min, time.sec);
     setTaskTotalText(e);
+    let task = e.path[4];
+    if (task.classList.contains('current')) setCurrentTask(task);
 }
 
 function stopCurrentSession() {
@@ -368,11 +349,17 @@ function stopCurrentSession() {
 // updates the current task in the task list
 function saveCurrentTask() {
     let remainSessions = getSessionCount();
-    let remainTime = formatTimeText(remainSessions * DEFAULT_SESSION, seconds);
+    // if timer is stopped, just calculate left sessions time,
+    // else add remaining minutes
+    let min = (minutes === 0 && seconds === 0) ?
+        remainSessions * DEFAULT_SESSION :
+        (remainSessions - 1) * DEFAULT_SESSION + minutes;
+
+    let remainTime = formatTimeText(min, seconds);
     setSessionCount(remainSessions);
     setRemainingText(remainTime);
-    setCurrentSession(remainSessions);
     setCurrentTaskDuration(remainTime);
+    setCurrentSession(remainSessions);
 }
 
 function resetTime() {
@@ -469,4 +456,50 @@ function stopBreakSession() {
     updateTitleTime();
     updateTimerText();
     $('#time').removeClass('break');
+}
+
+function deleteTask(e) {
+    e.stopPropagation();
+    document.querySelector('#tasks').removeChild(e.path[3]);
+    if (calculateTasksCount() === 0) {
+        hideCurrentTaskDescription();
+        resetTitle();
+        return;
+    }
+    // if we deleted the current task, set the first one
+    // from the task list to the current
+    if (getCurrentTask() === undefined)
+        setCurrentTask(document.querySelector('.task'));
+
+    updateTaskList();
+}
+
+function setCurrentTask(task) {
+    task.classList.add('current');
+    // get task time and reset global timer
+    let time = task.querySelector('.task-duration').textContent.split(':');
+    let min = parseInt(time[0]);
+    let sec = parseInt(time[1]);
+    let sessCount = parseInt(task.querySelector('.session-count').textContent);
+    if (min > DEFAULT_SESSION) {
+        min = Math.floor(min / sessCount);
+        sec = 0;
+    }
+    minutes = min;
+    seconds = sec;
+    setCurrentTaskDescription(task.querySelector('.task-description p').textContent);
+    setSessionCount(sessCount);
+    setCurrentTotal(task.querySelector('.total').textContent);
+    updateTimerText();
+}
+
+function getCurrentTask() {
+    return document.querySelector('.current');
+}
+
+function createElement(element, ...classes) {
+    if (!element) return;
+    let temp = document.createElement(element);
+    classes.forEach(item => temp.classList.add(item));
+    return temp;
 }
