@@ -1,20 +1,16 @@
-const chars = document.querySelector('#chars');
-const taskCountText = document.querySelector('#task-count');
-const tasks = document.querySelector('#tasks');
-const timeText = document.querySelector('#time');
-const allTasks = document.querySelectorAll('.task');
-const currentTaskDescription = document.querySelector('.description p');
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
 
-let DEFAULT_SESSION = 22;
+let DEFAULT_SESSION = 25;
 let DEFAULT_BREAK = 5;
 let DEFAULT_LONG_BREAK = 30;
 let DEFAULT_BREAK_COUNT = 4;
 
 let seconds = 0, minutes = DEFAULT_SESSION;
-let timerID = 0;
+let timerID = 0, breakCount = 0;
+
 let timerIsActive = false;
+let isBreakTime = false;
 
 init();
 
@@ -57,14 +53,12 @@ function initMenu() {
 }
 
 function initElements() {
-    const input = document.querySelector('#add-task-input');
-    const startTaskTimer = document.querySelector('.action.start');
-    const pauseTaskTimer = document.querySelector('.action.pause');
-    const stopTaskTimer = document.querySelector('.action.stop');
+    $('.action.start').click(e => startTimer());
+    $('.action.pause').click(e => pauseTimer());
+    $('.action.stop').click(e => stopTimer());
 
-    startTaskTimer.addEventListener('click', e => startTimer());
-    pauseTaskTimer.addEventListener('click', e => pauseTimer());
-    stopTaskTimer.addEventListener('click', e => stopTimer());
+    const input = document.querySelector('#add-task-input');
+    const chars = document.querySelector('#chars');
 
     input.addEventListener('input', e => {
         if (input.value === '') {
@@ -164,26 +158,27 @@ function createTask(text) {
     // when users click on the task
     section.addEventListener('click', e => {
         e.stopPropagation();
+        let target = e.currentTarget;
         // remove the current class from current task
         // add it to the clicked task
         $('.current').removeClass('current');
-        e.currentTarget.classList.add('current');
+        target.classList.add('current');
 
-        setCurrentTaskDescription(e.currentTarget.querySelector('.task-description p').textContent);
+        setCurrentTaskDescription(target.querySelector('.task-description p').textContent);
         currentTask.scrollIntoView();
         // get task time and reset global timer
-        let time = e.currentTarget.querySelector('.task-duration').textContent.split(':');
+        let time = target.querySelector('.task-duration').textContent.split(':');
         let min = parseInt(time[0]);
         let sec = parseInt(time[1]);
-        let sessCount = parseInt(e.currentTarget.querySelector('.session-count').textContent);
+        let sessCount = parseInt(target.querySelector('.session-count').textContent);
         if (min > DEFAULT_SESSION) {
             min = Math.floor(min / sessCount);
             sec = 0;
         }
         minutes = min;
         seconds = sec;
-        $('.current-task .current-count').text(sessCount);
-        $('.current-task .current-total').text(e.currentTarget.querySelector('.total').textContent);
+        setSessionCount(sessCount);
+        setCurrentTotal(target.querySelector('.total').textContent);
         updateTimerText();
     });
 
@@ -191,11 +186,14 @@ function createTask(text) {
     if (calculateTasksCount() === 0) {
         displayTaskDescription();
         setCurrentTaskDescription(text);
-        updateTimerText(time.textContent);
+        updateTimerText();
+        setSessionCount(1);
+        setCurrentTotal(DEFAULT_SESSION);
+        setRemainingText(formatTimeText(DEFAULT_SESSION, 0));
         document.querySelector('#add-task-input').scrollIntoView();
         section.classList.add('current');
     }
-    tasks.appendChild(section);
+    document.querySelector('#tasks').appendChild(section);
     updateTaskList();
 }
 
@@ -206,7 +204,7 @@ function calculateTasksCount() {
 
 function startTimer() {
     if (timerIsActive) return;
-    if (minutes < 0 && seconds < 0) return;
+    if (getSessionCount() === 0) return;
     if (minutes === 0 && seconds === 0) minutes = DEFAULT_SESSION;
 
     updateTimerText();
@@ -226,19 +224,26 @@ function updateTimer() {
     }
 
     if (minutes === 0 && seconds === 0) {
+        if (isBreakTime) {
+            stopBreakSession();
+            return;
+        }
         stopTimer();
-        alert('take a break!');
+        startBreakSession();
     }
     else
         updateTimerText();
 }
 
 function stopTimer() {
+    if (isBreakTime) {
+        stopBreakSession();
+        return;
+    }
     stopCurrentSession();
     clearInterval(timerID);
     resetTime();
     updateTimerText();
-    resetTitle();
     timerIsActive = false;
 }
 
@@ -249,21 +254,19 @@ function pauseTimer() {
     timerIsActive = false;
 }
 
-function updateTimerText(timer = timeText) {
-    let str = '';
-    str += formatTimeText(minutes, seconds);
-
-    timer.textContent = str;
-    updateRemainingText();
+function updateTimerText() {
+    $('#time').text(formatTimeText(minutes, seconds));
     updateTitleTime();
+
+    if (!isBreakTime) updateRemainingText();
 }
 
 function updateRemainingText() {
     let sessCount = getSessionCount();
     let min = (sessCount - 1) * DEFAULT_SESSION
-        + (minutes === 0 ? DEFAULT_SESSION : minutes);
+        + (minutes === 0 && seconds === 0 && sessCount > 0 ? DEFAULT_SESSION : minutes);
     let sec = seconds;
-    $('.current-task .current-remaining').text(formatTimeText(min, sec));
+    setRemainingText(formatTimeText(min, sec));
 }
 
 function formatTime(time) {
@@ -288,7 +291,7 @@ function displayTaskDescription() {
 
 function updateCurrentTask() {
     if (calculateTasksCount() === 0) {
-        currentTaskDescription.textContent = '';
+        setCurrentTaskDescription('');
         hideCurrentTaskDescription();
         return;
     }
@@ -298,11 +301,11 @@ function updateCurrentTask() {
 
 function updateTaskList() {
     let count = calculateTasksCount();
-    taskCountText.textContent = 'you have ' + count + (count % 10 === 1 ? ' task' : ' tasks');
+    $('#task-count').text('you have ' + count + (count % 10 === 1 ? ' task' : ' tasks'));
 }
 
 function setCurrentTaskDescription(text) {
-    currentTaskDescription.textContent = text;
+    $('.description p').text(text);
 }
 
 function addSession(e) {
@@ -356,7 +359,8 @@ function changeSessions(e, isAdding) {
 
 function stopCurrentSession() {
     let remaining = getRemainingTime();
-    if (remaining.minutes !== 0 && remaining.seconds !== 0) decrementTaskSession();
+    if (remaining.minutes !== 0 ||
+        (remaining.minutes === 0 && remaining.seconds !== 0)) decrementTaskSession();
     resetTime();
     saveCurrentTask();
 }
@@ -365,10 +369,10 @@ function stopCurrentSession() {
 function saveCurrentTask() {
     let remainSessions = getSessionCount();
     let remainTime = formatTimeText(remainSessions * DEFAULT_SESSION, seconds);
-    $('.current-task .current-count').text(remainSessions);
-    $('.current-task .current-remaining').text(remainTime);
-    $('.current .session-count').text(remainSessions);
-    $('.current .task-duration').text(remainTime);
+    setSessionCount(remainSessions);
+    setRemainingText(remainTime);
+    setCurrentSession(remainSessions);
+    setCurrentTaskDuration(remainTime);
 }
 
 function resetTime() {
@@ -377,24 +381,92 @@ function resetTime() {
 }
 
 function decrementTaskSession() {
-    $('.current-task .current-count').text(getSessionCount() - 1);
+    setSessionCount(getSessionCount() - 1);
+}
+
+function getRemainingTime() {
+    let time = getRemainigText().split(':');
+    return { minutes: parseInt(time[0]), seconds: parseInt(time[1]) };
+}
+
+function updateTitleTime() {
+    if (isBreakTime) {
+        setTitleText(getTimeText() + ' - take a break!');
+        return;
+    }
+
+    let task = getDescriptionText();
+    let taskSubstr = task.length > 15 ? task.substring(0, 15) : task.substring(0, task.length);
+    setTitleText(getTimeText() + ' - ' + taskSubstr);
+}
+
+function resetTitle() {
+    setTitleText('pomodoro');
 }
 
 function getSessionCount() {
     return parseInt($('.current-task .current-count').text());
 }
 
-function getRemainingTime() {
-    let time = $('.current-task .current-remaining').text().split(':');
-    return { minutes: parseInt(time[0]), seconds: parseInt(time[1]) };
+function setSessionCount(count) {
+    $('.current-task .current-count').text(count);
 }
 
-function updateTitleTime() {
-    let task = $('.current-task .description p').text();
-    let taskSubstr = task.length > 15 ? task.substring(0, 15) : task.substring(0, task.length);
-    $('#title').text($('#time').text() + ' - ' + taskSubstr);
+function setTimeText(text) {
+    $('#time').text(text);
 }
 
-function resetTitle() {
-    $('#title').text('pomodoro');
+function getTimeText() {
+    return $('#time').text();
+}
+
+function setTitleText(text) {
+    $('#title').text(text);
+}
+
+function getDescriptionText() {
+    return $('.current-task .description p').text();
+}
+
+function setRemainingText(text) {
+    $('.current-task .current-remaining').text(text)
+}
+
+function getRemainigText() {
+    return $('.current-task .current-remaining').text();
+}
+
+function setCurrentTaskDuration(text) {
+    $('.current .task-duration').text(text);
+}
+
+function setCurrentSession(count) {
+    $('.current .session-count').text(count);
+}
+
+function setCurrentTotal(text) {
+    $('.current-task .current-total').text(text);
+}
+
+function startBreakSession() {
+    breakCount++;
+    isBreakTime = true;
+    let isLongBreak = breakCount === DEFAULT_BREAK_COUNT;
+    minutes = isLongBreak ? DEFAULT_LONG_BREAK : DEFAULT_BREAK;
+    seconds = 0;
+    breakCount = isLongBreak ? 0 : breakCount;
+    setTimeText(formatTimeText(minutes, seconds));
+    $('#time').addClass('break');
+    updateTitleTime();
+}
+
+function stopBreakSession() {
+    timerIsActive = false;
+    isBreakTime = false;
+    minutes = DEFAULT_SESSION;
+    seconds = 0;
+    clearInterval(timerID);
+    updateTitleTime();
+    updateTimerText();
+    $('#time').removeClass('break');
 }

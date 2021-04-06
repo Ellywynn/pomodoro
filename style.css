@@ -55,6 +55,7 @@ button{
     margin: 5px;
     background-color: rgba(0,0,0,0);
     border: 2px solid var(--main-text-color);
+    border-radius: 5px;
     color: var(--main-text-color);
     font-size: 20px;
     transition: all 150ms ease;
@@ -248,6 +249,7 @@ button:active{
 .description p{
     color: var(--main-solid-color);
     font-size: 50px;
+    width: 100%;
     text-align: center;
     word-wrap: break-word;
 }
@@ -285,6 +287,7 @@ button:active{
     padding: 0 15px;
     background-color: rgba(0,0,0,0);
     border-color: rgba(0,0,0,0) rgba(0,0,0,0) var(--main-solid-color) rgba(0,0,0,0);
+    border-radius: 0px;
     color: var(--main-solid-color);
     transition: all 550ms;
     text-align: center;
@@ -297,6 +300,7 @@ button:active{
 #add-task-input:hover, #add-task-input:focus{
     font-size: 100px;
     border: 3px solid var(--main-solid-color);
+    border-radius: 10px;
 }
 
 #chars{
@@ -381,6 +385,15 @@ button:active{
     height: 100%;
 }
 
+#time{
+    transition: all 0.5s ease;
+    color: var(--main-text-color);
+}
+
+#time.break{
+    color: rgba(0, 150, 0, 0.83);
+}
+
 .task-sessions{
     font-size: 35px;
     display: flex;
@@ -423,6 +436,7 @@ button:active{
 
 .task-description p{
     height: 100%;
+    width: 100%;
     font-size: 50px;
     text-align: center;
     padding: 15px;
