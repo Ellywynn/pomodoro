@@ -56,6 +56,7 @@ function initElements() {
     $('.action.start').click(e => startTimer());
     $('.action.pause').click(e => pauseTimer());
     $('.action.stop').click(e => stopTimer());
+    document.querySelector('.action.delete').addEventListener('click', deleteTask);
 
     const input = document.querySelector('#add-task-input');
     const chars = document.querySelector('#chars');
@@ -460,7 +461,11 @@ function stopBreakSession() {
 
 function deleteTask(e) {
     e.stopPropagation();
-    document.querySelector('#tasks').removeChild(e.path[3]);
+    if (e.currentTarget === document.querySelector('.action.delete'))
+        $('.current').remove();
+    else
+        document.querySelector('#tasks').removeChild(e.path[3]);
+
     if (calculateTasksCount() === 0) {
         hideCurrentTaskDescription();
         resetTitle();

@@ -315,7 +315,7 @@ button:active{
 }
 
 .done:hover{
-    color: green;
+    color: rgb(0,200,0);
     border-color: green;
     background-color: rgba(0,200,0,0.3);
 }
