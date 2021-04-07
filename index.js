@@ -77,6 +77,10 @@ function initElements() {
         input.value = '';
         chars.textContent = '';
     });
+
+    document.querySelectorAll('.inner.backgrounds').forEach(item => {
+        item.addEventListener('click', changeBackground);
+    })
 }
 
 function createTask(text) {
@@ -507,4 +511,26 @@ function createElement(element, ...classes) {
     let temp = document.createElement(element);
     classes.forEach(item => temp.classList.add(item));
     return temp;
+}
+
+function changeBackground(e) {
+    let video = document.querySelector('#video');
+    let source = video.querySelector('source');
+    video.pause();
+    let file = e.currentTarget.querySelector('span').textContent;
+    source.src = 'img/' + file + '.mp4';
+    video.load();
+    video.play();
+}
+
+function saveSettings() {
+    let settings = document.querySelectorAll('.set');
+    settings.forEach(item => {
+        if (!Number.isInteger(item.value)) continue;
+    });
+
+    DEFAULT_SESSION = $('#session').val();
+    DEFAULT_BREAK = $('#short-break').val();
+    DEFAULT_LONG_BREAK = $('#long-break').val();
+    DEFAULT_BREAK_COUNT = $('#long-session').val();
 }

@@ -12,8 +12,8 @@
 
 <body>
     <div id="background" class="flex">
-        <video autoplay loop muted>
-            <source src="img/home.mp4" type="video/mp4">
+        <video id="video" autoplay loop muted>
+            <source src="img/train.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -28,16 +28,19 @@
             <div id="settings" class="menu-action">
                 <p class="flex">settings</p>
                 <div class="inner settings flex">
-                    <span>session duration: <input type="text" value="25"></span>
+                    <span>session duration: <input id="session" class="set" type="text" value="25"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>long break session: <input type="text" value="4"></span>
+                    <span>short break duration: <input id="short-break" class="set" type="text" value="5"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>short break duration: <input type="text" value="5"></span>
+                    <span>long break duration: <input id="long-break" class="set" type="text" value="30"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>long break duration: <input type="text" value="30"></span>
+                    <span>sessions for long break: <input id="long-session" class="set" type="text" value="4"></span>
+                </div>
+                <div class="inner settings flex">
+                    <button class="save">save</button>
                 </div>
             </div>
             <div id="music" class="menu-action">
@@ -55,10 +58,24 @@
             <div id="backgrounds" class="menu-action">
                 <p class="flex">backgrounds</p>
                 <div class="inner backgrounds flex">
-                    <span>bg here</span>
+                    <img src="img/home.png" alt="">
+                    <span>home</span>
                 </div>
                 <div class="inner backgrounds flex">
-                    <span>bg here</span>
+                    <img src="img/city.png" alt="">
+                    <span>city</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <img src="img/rain.png" alt="">
+                    <span>rain</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <img src="img/train.png" alt="">
+                    <span>train</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <img src="img/street.png" alt="">
+                    <span>street</span>
                 </div>
             </div>
         </div>
