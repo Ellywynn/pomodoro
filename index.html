@@ -13,7 +13,7 @@
 <body>
     <div id="background" class="flex">
         <video id="video" autoplay loop muted>
-            <source src="img/train.mp4" type="video/mp4">
+            <source src="img/rain.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -28,19 +28,20 @@
             <div id="settings" class="menu-action">
                 <p class="flex">settings</p>
                 <div class="inner settings flex">
-                    <span>session duration: <input id="session" class="set" type="text" value="25"></span>
+                    <span>session duration: <input id="SESSION" type="text" value="25" maxlength="2"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>short break duration: <input id="short-break" class="set" type="text" value="5"></span>
+                    <span>short break duration: <input id="BREAK" type="text" value="5" maxlength="2"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>long break duration: <input id="long-break" class="set" type="text" value="30"></span>
+                    <span>long break duration: <input id="LONG_BREAK" type="text" value="30" maxlength="2"></span>
                 </div>
                 <div class="inner settings flex">
-                    <span>sessions for long break: <input id="long-session" class="set" type="text" value="4"></span>
+                    <span>sessions for long break: <input id="BREAK_COUNT" type="text" value="4" maxlength="1"></span>
                 </div>
                 <div class="inner settings flex">
                     <button class="save">save</button>
+                    <button class="reset">reset</button>
                 </div>
             </div>
             <div id="music" class="menu-action">

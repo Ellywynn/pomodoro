@@ -6,6 +6,8 @@ let DEFAULT_BREAK = 5;
 let DEFAULT_LONG_BREAK = 30;
 let DEFAULT_BREAK_COUNT = 4;
 
+let settings = [];
+
 let seconds = 0, minutes = DEFAULT_SESSION;
 let timerID = 0, breakCount = 0;
 
@@ -49,6 +51,10 @@ function initMenu() {
                 $('.inner').removeClass('visible');
             }
         });
+
+        resetSettings();
+        $('.inner.settings .save').click(e => saveSettings());
+        $('.inner.settings .reset').click(e => resetSettings());
     });
 }
 
@@ -87,13 +93,13 @@ function createTask(text) {
     let section = createElement('section', 'task');
 
     let total = createElement('p', 'total');
-    total.textContent = DEFAULT_SESSION + ':00';
+    total.textContent = settings['SESSION'] + ':00';
     section.appendChild(total);
 
     let taskInfo = createElement('div', 'task-info');
 
     let taskDuration = createElement('p', 'task-duration');
-    taskDuration.textContent = DEFAULT_SESSION + ':00';
+    taskDuration.textContent = settings['SESSION'] + ':00';
     taskDuration.addEventListener('click', e => e.stopPropagation());
 
     let taskSessions = document.createElement('div');
@@ -170,7 +176,7 @@ function createTask(text) {
     // if this is the first task, set it to the current task
     if (calculateTasksCount() === 0) {
         displayTaskDescription();
-        setRemainingText(formatTimeText(DEFAULT_SESSION, 0));
+        setRemainingText(formatTimeText(settings['SESSION'], 0));
         setCurrentTask(section);
         currentTask.scrollIntoView();
         document.querySelector('#add-task-input').scrollIntoView();
@@ -187,7 +193,7 @@ function calculateTasksCount() {
 function startTimer() {
     if (timerIsActive) return;
     if (getSessionCount() === 0) return;
-    if (minutes === 0 && seconds === 0) minutes = DEFAULT_SESSION;
+    if (minutes === 0 && seconds === 0) minutes = settings['SESSION'];
 
     updateTimerText();
     timerID = setInterval(updateTimer, 1000);
@@ -246,8 +252,8 @@ function updateTimerText() {
 
 function updateRemainingText() {
     let sessCount = getSessionCount();
-    let min = (sessCount - 1) * DEFAULT_SESSION
-        + (minutes === 0 && seconds === 0 && sessCount > 0 ? DEFAULT_SESSION : minutes);
+    let min = (sessCount - 1) * settings['SESSION']
+        + (minutes === 0 && seconds === 0 && sessCount > 0 ? settings['SESSION'] : minutes);
     let sec = seconds;
     setRemainingText(formatTimeText(min, sec));
 }
@@ -328,11 +334,11 @@ function changeSessions(e, isAdding) {
 
     if (isAdding) {
         if (sessions >= 10) return;
-        time.min += DEFAULT_SESSION;
+        time.min += settings['SESSION'];
         sessions++;
     } else {
-        if (time.min <= DEFAULT_SESSION) return;
-        time.min -= DEFAULT_SESSION;
+        if (time.min <= settings['SESSION']) return;
+        time.min -= settings['SESSION'];
         sessions--;
     }
 
@@ -357,8 +363,8 @@ function saveCurrentTask() {
     // if timer is stopped, just calculate left sessions time,
     // else add remaining minutes
     let min = (minutes === 0 && seconds === 0) ?
-        remainSessions * DEFAULT_SESSION :
-        (remainSessions - 1) * DEFAULT_SESSION + minutes;
+        remainSessions * settings['SESSION'] :
+        (remainSessions - 1) * settings['SESSION'] + minutes;
 
     let remainTime = formatTimeText(min, seconds);
     setSessionCount(remainSessions);
@@ -443,8 +449,8 @@ function setCurrentTotal(text) {
 function startBreakSession() {
     breakCount++;
     isBreakTime = true;
-    let isLongBreak = breakCount === DEFAULT_BREAK_COUNT;
-    minutes = isLongBreak ? DEFAULT_LONG_BREAK : DEFAULT_BREAK;
+    let isLongBreak = breakCount === settings['BREAK_COUNT'];
+    minutes = isLongBreak ? settings['LONG_BREAK'] : settings['BREAK'];
     seconds = 0;
     breakCount = isLongBreak ? 0 : breakCount;
     setTimeText(formatTimeText(minutes, seconds));
@@ -455,7 +461,7 @@ function startBreakSession() {
 function stopBreakSession() {
     timerIsActive = false;
     isBreakTime = false;
-    minutes = DEFAULT_SESSION;
+    minutes = settings['SESSION'];
     seconds = 0;
     clearInterval(timerID);
     updateTitleTime();
@@ -475,9 +481,10 @@ function deleteTask(e) {
         resetTitle();
         return;
     }
+
     // if we deleted the current task, set the first one
     // from the task list to the current
-    if (getCurrentTask() === undefined)
+    if (getCurrentTask() === null)
         setCurrentTask(document.querySelector('.task'));
 
     updateTaskList();
@@ -490,7 +497,7 @@ function setCurrentTask(task) {
     let min = parseInt(time[0]);
     let sec = parseInt(time[1]);
     let sessCount = parseInt(task.querySelector('.session-count').textContent);
-    if (min > DEFAULT_SESSION) {
+    if (min > settings['SESSION']) {
         min = Math.floor(min / sessCount);
         sec = 0;
     }
@@ -524,13 +531,22 @@ function changeBackground(e) {
 }
 
 function saveSettings() {
-    let settings = document.querySelectorAll('.set');
-    settings.forEach(item => {
-        if (!Number.isInteger(item.value)) continue;
-    });
+    let inputs = document.querySelectorAll('.inner.settings input');
+    inputs.forEach(setting => {
+        let value = setting.value.trim();
+        // if entered value is corrupted, set it to the current value
+        if (/\D/.test(value)) { setting.value = settings[setting.id]; return; }
 
-    DEFAULT_SESSION = $('#session').val();
-    DEFAULT_BREAK = $('#short-break').val();
-    DEFAULT_LONG_BREAK = $('#long-break').val();
-    DEFAULT_BREAK_COUNT = $('#long-session').val();
+        settings[setting.id] = parseInt(value);
+    });
+}
+
+function resetSettings() {
+    settings['SESSION'] = DEFAULT_SESSION;
+    settings['BREAK'] = DEFAULT_BREAK;
+    settings['LONG_BREAK'] = DEFAULT_LONG_BREAK;
+    settings['BREAK_COUNT'] = DEFAULT_BREAK_COUNT;
+
+    let sets = document.querySelectorAll('.inner.settings input');
+    sets.forEach(input => input.value = settings[input.id]);
 }
