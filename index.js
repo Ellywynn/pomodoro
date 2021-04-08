@@ -528,13 +528,8 @@ function createElement(element, ...classes) {
 }
 
 function changeBackground(e) {
-    let video = document.querySelector('#video');
-    let source = video.querySelector('source');
-    video.pause();
-    let file = e.currentTarget.querySelector('span').textContent;
-    source.src = 'img/' + file + '.mp4';
-    video.load();
-    video.play();
+    e.stopPropagation();
+    $('#background img').attr('src', (e.path[1].querySelector('img').src));
 }
 
 function saveSettings() {

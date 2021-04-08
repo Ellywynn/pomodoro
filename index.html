@@ -12,9 +12,7 @@
 
 <body>
     <div id="background" class="flex">
-        <video id="video" autoplay loop muted>
-            <source src="img/rain.mp4" type="video/mp4">
-        </video>
+        <img src="img/gas_station.gif" alt="">
     </div>
 
     <div class="menu-button">
@@ -28,16 +26,20 @@
             <div id="settings" class="menu-action">
                 <p class="flex">settings</p>
                 <div class="inner settings flex">
-                    <span>session duration: <input id="SESSION" type="text" value="25" maxlength="2"></span>
+                    <span>session duration:</span>
+                    <input id="SESSION" type="text" value="25" maxlength="2">
                 </div>
                 <div class="inner settings flex">
-                    <span>short break duration: <input id="BREAK" type="text" value="5" maxlength="2"></span>
+                    <span>short break duration:</span>
+                    <input id="BREAK" type="text" value="5" maxlength="2">
                 </div>
                 <div class="inner settings flex">
-                    <span>long break duration: <input id="LONG_BREAK" type="text" value="30" maxlength="2"></span>
+                    <span>long break duration:</span>
+                    <input id="LONG_BREAK" type="text" value="30" maxlength="2">
                 </div>
                 <div class="inner settings flex">
-                    <span>sessions for long break: <input id="BREAK_COUNT" type="text" value="4" maxlength="1"></span>
+                    <span>sessions for long break:</span>
+                    <input id="BREAK_COUNT" type="text" value="4" maxlength="1">
                 </div>
                 <div class="inner settings flex">
                     <button class="save">save</button>
@@ -45,9 +47,11 @@
                 </div>
             </div>
             <div id="music" class="menu-action">
-                <p class="flex">music</p>
+                <p class="flex">audio</p>
                 <div class="inner music flex">
-
+                    <audio src="audio/cafe.mp3" loop controls>
+                        <p>Your browser does not support <code>audio</code> element.</p>
+                    </audio>
                 </div>
                 <div class="inner music flex">
                     <span>audio here</span>
@@ -56,24 +60,32 @@
             <div id="backgrounds" class="menu-action">
                 <p class="flex">backgrounds</p>
                 <div class="inner backgrounds flex">
-                    <img src="img/home.png" alt="">
-                    <span>home</span>
+                    <img src="img/gas_station.gif" alt="">
+                    <span>station</span>
                 </div>
                 <div class="inner backgrounds flex">
-                    <img src="img/city.png" alt="">
-                    <span>city</span>
+                    <img src="img/coffee.gif" alt="">
+                    <span>coffee</span>
                 </div>
                 <div class="inner backgrounds flex">
-                    <img src="img/rain.png" alt="">
-                    <span>rain</span>
+                    <img src="img/night_play.gif" alt="">
+                    <span>night play</span>
                 </div>
                 <div class="inner backgrounds flex">
-                    <img src="img/train.png" alt="">
-                    <span>train</span>
+                    <img src="img/night_workspace.gif" alt="">
+                    <span>night workspace</span>
                 </div>
                 <div class="inner backgrounds flex">
-                    <img src="img/street.png" alt="">
-                    <span>street</span>
+                    <img src="img/town.gif" alt="">
+                    <span>town</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <img src="img/stars.gif" alt="">
+                    <span>falling stars</span>
+                </div>
+                <div class="inner backgrounds flex">
+                    <img src="img/sunset.gif" alt="">
+                    <span>sunset</span>
                 </div>
             </div>
         </div>
