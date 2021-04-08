@@ -154,7 +154,7 @@ button:active{
 }
 
 .menu.active{
-    max-width: 40%;
+    max-width: 400px;
     visibility: visible;
     transform: translateX(0px);
 }
@@ -168,6 +168,7 @@ button:active{
     margin: 2px;
     cursor: pointer;
 }
+
 .menu-action p{
     transition: all 0.4s ease;
     width: 100%;
@@ -280,10 +281,11 @@ button:active{
     margin: 15px 0;
     padding: 15px;
     transition: all 550ms;
+    background-color: rgba(0,0,0,0.4);
 }
 
 .description:hover{
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.6);
 }
 
 .description p{

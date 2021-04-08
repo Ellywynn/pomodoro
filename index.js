@@ -211,6 +211,8 @@ function updateTimer() {
         seconds = 59;
     }
 
+    saveCurrentTask();
+
     if (minutes === 0 && seconds === 0) {
         if (isBreakTime) {
             stopBreakSession();
@@ -471,12 +473,16 @@ function stopBreakSession() {
 
 function deleteTask(e) {
     e.stopPropagation();
+    // if we are click delete button from the timer tab,
+    // find and delete current task
     if (e.currentTarget === document.querySelector('.action.delete'))
         $('.current').remove();
     else
         document.querySelector('#tasks').removeChild(e.path[3]);
 
+    // if there is no tasks anymore, hide everything
     if (calculateTasksCount() === 0) {
+        resetBreakCount();
         hideCurrentTaskDescription();
         resetTitle();
         return;
@@ -491,6 +497,7 @@ function deleteTask(e) {
 }
 
 function setCurrentTask(task) {
+    resetBreakCount();
     task.classList.add('current');
     // get task time and reset global timer
     let time = task.querySelector('.task-duration').textContent.split(':');
@@ -539,6 +546,8 @@ function saveSettings() {
 
         settings[setting.id] = parseInt(value);
     });
+
+    updateEveryTask();
 }
 
 function resetSettings() {
@@ -549,4 +558,19 @@ function resetSettings() {
 
     let sets = document.querySelectorAll('.inner.settings input');
     sets.forEach(input => input.value = settings[input.id]);
+}
+
+function updateEveryTask() {
+    let tasks = document.querySelectorAll('.task');
+    tasks.forEach(task => {
+        let sessionCount = parseInt(task.querySelector('.session-count').textContent);
+        let time = formatTimeText(sessionCount * settings['SESSION'], 0);
+        task.querySelector('.task-duration').textContent = time;
+        task.querySelector('.total').textContent = time;
+    });
+    setCurrentTask(getCurrentTask());
+}
+
+function resetBreakCount() {
+    breakCount = 0;
 }
