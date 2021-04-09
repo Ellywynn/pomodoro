@@ -207,7 +207,7 @@ button:active{
     visibility: visible;
 }
 
-.inner.settings input{
+.inner.settings input[type=text]{
     transition: all 0.5s ease;
     width: 0px;
     min-height: 0px;
@@ -217,7 +217,7 @@ button:active{
     background-color: rgba(200,200,200,0);
 }
 
-.inner.settings.visible input{
+.inner.settings.visible input[type=text]{
     width: 40px;
     min-height: 30px;
     height: 30px;
@@ -229,20 +229,44 @@ button:active{
     border: none;
 }
 
-.inner.visible input:focus,
-.inner.visible input:hover{
+.inner.visible input[type=text]:focus,
+.inner.visible input[type=text]:hover{
     background-color: rgba(0,0,0,0.7);
     color: #fff;
     transition: all 0.3s ease;
     border: none;
 }
 
-.inner.visible input:focus{
+.inner.visible input[type=text]:focus{
     border: 2px solid var(--light-main-color);
 }
 
 .inner.settings span{
     width: 85%;
+}
+
+.player{
+    width: 100%;
+    height: 70px;
+    gap: 20px;
+}
+
+.player audio{
+    display: none;
+    visibility: hidden;
+}
+
+.play-button:hover{
+    cursor: pointer;
+}
+
+.audio-name:hover{
+    cursor: default;
+}
+
+.audio-name{
+    text-align: center;
+    width: 35%;
 }
 
 .inner.backgrounds{

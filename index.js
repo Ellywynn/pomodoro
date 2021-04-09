@@ -55,6 +55,21 @@ function initMenu() {
         resetSettings();
         $('.inner.settings .save').click(e => saveSettings());
         $('.inner.settings .reset').click(e => resetSettings());
+
+        // change the volume of the track
+        $(document).on('input change', '.inner.music input', e => {
+            e.stopPropagation();
+            e.originalEvent.path[1].querySelector('audio').volume = parseInt(e.target.value) / 100;
+        });
+
+        // toggle pause/play track
+        $('.play-button').click(e => {
+            e.target.classList.toggle('fa-play');
+            e.target.classList.toggle('fa-pause');
+            let audio = e.originalEvent.path[1].querySelector('audio');
+            if (e.target.classList.contains('fa-play')) audio.pause();
+            else audio.play();
+        });
     });
 }
 
