@@ -1,5 +1,6 @@
 const currentTask = document.querySelector('.current-task');
 const taskList = document.querySelector('.task-list');
+const notification = document.querySelector('#alert');
 
 let DEFAULT_SESSION = 25;
 let DEFAULT_BREAK = 5;
@@ -78,6 +79,7 @@ function initElements() {
     $('.action.pause').click(e => pauseTimer());
     $('.action.stop').click(e => stopTimer());
     document.querySelector('.action.delete').addEventListener('click', deleteTask);
+    notification.volume = 0.5;
 
     const input = document.querySelector('#add-task-input');
     const chars = document.querySelector('#chars');
@@ -489,6 +491,7 @@ function setCurrentTotal(text) {
 }
 
 function startBreakSession() {
+    alert.play();
     breakCount++;
     isBreakTime = true;
     let isLongBreak = breakCount === settings['BREAK_COUNT'];
@@ -501,6 +504,7 @@ function startBreakSession() {
 }
 
 function stopBreakSession() {
+    alert.play();
     timerIsActive = false;
     isBreakTime = false;
     minutes = settings['SESSION'];

@@ -35,10 +35,14 @@ body, html{
     z-index: -1;
 }
 
-
 #background img{
     min-width: 100%;
     min-height: 100%;
+}
+
+#alert{
+    display: none;
+    visibility: hidden;
 }
 
 main{
