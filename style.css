@@ -14,6 +14,10 @@ body, html{
     position: relative;
 }
 
+.visible{
+    visibility: visible;
+}
+
 .flex{
     display: flex;
     justify-content: center;
@@ -287,7 +291,6 @@ button:active{
 
 .description{
     min-height: 300px;
-    height: 10%;
     width: 100%;
     margin: 15px 0;
     padding: 15px;
@@ -300,11 +303,47 @@ button:active{
 }
 
 .description p{
+    visibility: none;
+    display: none;
+}
+
+.description p.visible{
     color: var(--main-solid-color);
     font-size: 50px;
     width: 100%;
     text-align: center;
     word-wrap: break-word;
+    display: block;
+}
+
+.edit-state{
+    display: none;
+    visibility: hidden;
+    flex-direction: column;
+}
+
+.edit-state.visible{
+    display: block;
+    visibility: visible;
+    width: 100%;
+    min-height: 300px;
+}
+
+.edit-state textarea{
+    width: 100%;
+    height: 200px;  
+    outline: none;
+    background-color: rgba(0,0,0,0.3);
+    color: var(--light-solid-color);
+    font-size: 30px;
+    text-align: center;
+    resize: none;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.edit-state .actions{
+    justify-content: flex-end;
 }
 
 .current-task-info{

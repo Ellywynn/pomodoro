@@ -66,6 +66,31 @@ function initElements() {
 
     const input = document.querySelector('#add-task-input');
     const chars = document.querySelector('#chars');
+    const descTextarea = document.querySelector('.description textarea');
+    const descText = document.querySelector('.description p');
+    const saveEdit = document.querySelector('.edit-state .actions .save');
+    const cancelEdit = document.querySelector('.edit-state .actions .delete');
+
+    descText.addEventListener('click', e => {
+        e.stopPropagation();
+        toggleEditBlock();
+        descTextarea.focus();
+        descTextarea.value = descText.textContent;
+        descTextarea.setSelectionRange(
+            descTextarea.value.length, descTextarea.value.length);
+    });
+
+    saveEdit.addEventListener('click', e => {
+        e.stopPropagation();
+        setCurrentTaskDescription(descTextarea.value);
+        changeCurrentTaskText(descTextarea.value);
+        toggleEditBlock();
+    });
+
+    cancelEdit.addEventListener('click', e => {
+        e.stopPropagation();
+        toggleEditBlock();
+    });
 
     input.addEventListener('input', e => {
         if (input.value === '') {
@@ -473,6 +498,7 @@ function stopBreakSession() {
 
 function deleteTask(e) {
     e.stopPropagation();
+    pauseTimer();
     // if we are click delete button from the timer tab,
     // find and delete current task
     if (e.currentTarget === document.querySelector('.action.delete'))
@@ -568,4 +594,16 @@ function updateEveryTask() {
 
 function resetBreakCount() {
     breakCount = 0;
+}
+
+function changeCurrentTaskText(text) {
+    let current = document.querySelector('.current');
+    if (current) current.querySelector('.task-description p').textContent = text;
+}
+
+function toggleEditBlock() {
+    const descText = document.querySelector('.description p');
+    const editBlock = document.querySelector('.edit-state');
+    descText.classList.toggle('visible');
+    editBlock.classList.toggle('visible');
 }
