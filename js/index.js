@@ -102,6 +102,7 @@ function initElements() {
         setCurrentTaskDescription(descTextarea.value);
         changeCurrentTaskText(descTextarea.value);
         toggleEditBlock();
+        updateTitleTime();
     });
 
     cancelEdit.addEventListener('click', e => {
