@@ -576,7 +576,36 @@ footer a{
 }
 
 /* small phones */
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 767px) {
+    .menu-button{
+        width: 30px;
+        height: 30px;
+        left: 10px;
+        top: 10px;
+    }
+
+    .menu-button .first{
+        top: 5px;
+    }
+    .menu-button .second{
+        top: 14px;
+    }
+    .menu-button .third{
+        bottom: 5px;
+    }
+
+    .menu-button.active .first{
+        transform: rotate(45deg);
+        top: 14px;
+    }
+    .menu-button.active .third{
+        transform: rotate(-45deg);
+        bottom: 14px;
+    }
+    .menu-button.active .second{
+        transform: scale(0);
+    }
+    
     .menu{
         width: 100%;
         height: 100%;
@@ -592,9 +621,10 @@ footer a{
     .current-task{
         margin-top: 70px;
         width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    }
+
+    .time{
+        width: 100%;
     }
 
     #time{
@@ -690,7 +720,6 @@ footer a{
 
     .task-duration{
         font-size: 75px;
-        width: 100%;
         height: 50px;
         display: flex;
         justify-content: center;
@@ -698,13 +727,14 @@ footer a{
     }
 
     .task-sessions{
-        font-size: 30px;
+        font-size: 22px;
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: center;
         gap: 5px;
         width: 60%;
-        height: 50px;
+        height: 45px;
     }
 
     .session-count{
@@ -730,15 +760,255 @@ footer a{
     }
 }
 
-/* medium phones */
-@media only screen and (max-width: 767px) {
+@media only screen and (min-width: 600px){
+    #background img{
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    #time{
+        font-size: 150px;
+    }
+
+    .task-sessions{
+        font-size: 30px;
+    }
+}
+
+/* small tablets */
+@media only screen and (min-width: 768px){
+    .menu-button{
+        width: 50px;
+        height: 50px;
+    }
+
+    .menu-button .first{
+        top: 10px;
+    }
+    .menu-button .second{
+        top: 24px;
+    }
+    .menu-button .third{
+        bottom: 10px;
+    }
+
+    .menu-button.active .first{
+        transform: rotate(45deg);
+        top: 24px;
+    }
+    .menu-button.active .third{
+        transform: rotate(-45deg);
+        bottom: 24px;
+    }
+
     #background img{
         min-width: auto;
         min-height: 100%;
     }
+
+    .current-task{
+        margin-top: 70px;
+        width: 100%;
+    }
+
+    .time{
+        width: 100%;
+    }
+
+    #time{
+        font-size: 200px;
+    }
+
+    .time-actions{
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .time-actions button{
+        min-width: 110px;
+        min-height: 50px;
+        width: 110px;
+        font-size: 22px;
+    }
+
+    .current-task-info{
+        color: var(--main-text-color);
+        gap: 10px;
+        font-size: 34px;
+        text-align: center;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .description p.visible{
+        font-size: 45px;    
+    }
+
+    .add-task{
+        width: 90%;
+        height: 80px;
+        margin: 30px 0;
+    }
+
+    .add-task div{
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    #add-task-input{
+        width: 100%;
+        height: 100%;
+        font-size: 60px;
+        padding: 10px 5px;
+    }
+
+    #add-task-input:hover, #add-task-input:focus{
+        font-size: 65px;
+        border: 3px solid var(--main-solid-color);
+        border-radius: 10px;
+    }
+
+    #chars{
+        font-size: 10px;
+        right: 10px;
+        bottom: 10px;
+    }
+
+    #task-count{
+        font-size: 60px;
+        min-height: auto;
+        height: 70px;
+        margin: 0;
+    }
+
+    #tasks{
+        width: 100%;
+    }
+
+    .task{
+        width: 95%;
+        min-height: 250px;
+        border-radius: 10px;
+        margin: 15px 0px;
+    }
+    
+    .task .total{
+        display: none;
+    }
+
+    .task-info{
+        width: 40%;
+        height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .task-duration{
+        font-size: 75px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .task-sessions{
+        font-size: 22px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        height: 45px;
+    }
+
+    .session-count{
+        margin-left: 0;
+    }
+
+    .add-sub button{
+        min-width: 27px;
+        min-height: 27px;
+        width: 27px;
+        height: 27px;
+        font-size: 22px;
+    }
+
+    .done-delete button{
+        min-width: 80px;
+        min-height: 40px;
+        width: 80px;
+        font-size: 18px;
+    }
+
+    .task-description{
+        width: 60%;
+    }
+
+    .task-description p{
+        font-size: 25px;
+        padding: 10px;
+    }
 }
 
-/* tablets */
-@media only screen and (min-width: 768px) {
-
+@media only screen and (min-width: 1024px) and (max-width: 1200px){
+    #time{
+        font-size: 250px;
+    }
+    .time-actions button{
+        min-width: 130px;
+        min-height: 50px;
+        width: 130px;
+        font-size: 30px;
+    }
+    .current-task-info{
+        font-size: 40px;
+    }
+    .add-task{
+        width: 90%;
+        height: 120px;
+        margin: 30px 0;
+    }
+    #add-task-input{
+        font-size: 70px;
+    }
+    #add-task-input:hover, #add-task-input:focus{
+        font-size: 75px;
+        padding: 10px 0;
+    }
+    #chars{
+        font-size: 12px;
+    }
+    #task-count{
+        font-size: 70px;
+        height: 80px;
+    }
+    .task-info{
+        width: 30%;
+    }
+    .task-duration{
+        font-size: 85px;
+        height: 50px;
+        margin-bottom: 5px;
+    }
+    .task-sessions{
+        font-size: 30px;
+        gap: 5px;
+        width: 100%;
+        height: 45px;
+    }
+    .done-delete button{
+        min-width: 90px;
+        min-height: 40px;
+        width: 90px;
+        font-size: 22px;
+    }
+    .task-description p{
+        font-size: 35px;
+    }
 }

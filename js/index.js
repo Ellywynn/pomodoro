@@ -143,18 +143,15 @@ function createTask(text) {
 
     let taskDuration = createElement('p', 'task-duration');
     taskDuration.textContent = settings['SESSION'] + ':00';
-    taskDuration.addEventListener('click', e => e.stopPropagation());
 
     let taskSessions = document.createElement('div');
     taskSessions.classList.add('task-sessions');
 
     let p = document.createElement('p');
     p.textContent = 'sessions: ';
-    p.addEventListener('click', e => e.stopPropagation());
     let sessionCount = document.createElement('span');
     sessionCount.classList.add('session-count');
     sessionCount.textContent = '1';
-    sessionCount.addEventListener('click', e => e.stopPropagation());
     p.appendChild(sessionCount);
 
     let buttons1 = document.createElement('div');
@@ -199,7 +196,6 @@ function createTask(text) {
     taskDescription.classList.add('flex');
     let desc = document.createElement('p');
     desc.textContent = text;
-    desc.addEventListener('click', e => e.stopPropagation());
     taskDescription.appendChild(desc);
 
     section.appendChild(taskInfo);
@@ -221,6 +217,7 @@ function createTask(text) {
         displayTaskDescription();
         setRemainingText(formatTimeText(settings['SESSION'], 0));
         setCurrentTask(section);
+        currentTask.classList.add('flex');
         currentTask.scrollIntoView();
         document.querySelector('#add-task-input').scrollIntoView();
     }
@@ -528,6 +525,7 @@ function deleteTask(e) {
 
     // if there is no tasks anymore, hide everything
     if (calculateTasksCount() === 0) {
+        currentTask.classList.remove('flex');
         resetBreakCount();
         hideCurrentTaskDescription();
         resetTitle();
