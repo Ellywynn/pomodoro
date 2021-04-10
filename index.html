@@ -14,173 +14,172 @@
 </head>
 
 <body>
-    <div id="background" class="flex">
-        <img src="img/gas_station.gif" alt="">
-    </div>
-
-    <audio src="audio/alert.mp3" id="alert"></audio>
-
-    <div class="menu-button">
-        <div class="burger first"></div>
-        <div class="burger second"></div>
-        <div class="burger third"></div>
-    </div>
-
-    <aside class="menu">
-        <div class="container">
-            <div id="settings" class="menu-action">
-                <p class="flex">settings</p>
-                <div class="inner settings flex">
-                    <span>session duration:</span>
-                    <input id="SESSION" type="text" value="25" maxlength="2">
-                </div>
-                <div class="inner settings flex">
-                    <span>short break duration:</span>
-                    <input id="BREAK" type="text" value="5" maxlength="2">
-                </div>
-                <div class="inner settings flex">
-                    <span>long break duration:</span>
-                    <input id="LONG_BREAK" type="text" value="30" maxlength="2">
-                </div>
-                <div class="inner settings flex">
-                    <span>sessions for long break:</span>
-                    <input id="BREAK_COUNT" type="text" value="4" maxlength="1">
-                </div>
-                <div class="inner settings flex">
-                    <button class="save">save</button>
-                    <button class="reset">reset</button>
-                </div>
-            </div>
-            <div id="music" class="menu-action">
-                <p class="flex">audio</p>
-                <div class="inner music flex">
-                    <div class="player flex">
-                        <audio src="audio/skyrim.mp3" loop></audio>
-                        <span class="audio-name">skyrim</span>
-                        <i class="fa fa-play play-button" aria-hidden="true"></i>
-                        <input type="range" class="music-volume" value="50" min="0" max="100">
-                    </div>
-                </div>
-                <div class="inner music flex">
-                    <div class="player flex">
-                        <audio src="audio/cafe.mp3" loop></audio>
-                        <span class="audio-name">cafe</span>
-                        <i class="fa fa-play play-button" aria-hidden="true"></i>
-                        <input type="range" class="music-volume" value="50" min="0" max="100">
-                    </div>
-                </div>
-                <div class="inner music flex">
-                    <div class="player flex">
-                        <audio src="audio/forest.mp3" loop></audio>
-                        <span class="audio-name">forest</span>
-                        <i class="fa fa-play play-button" aria-hidden="true"></i>
-                        <input type="range" class="music-volume" value="50" min="0" max="100">
-                    </div>
-                </div>
-                <div class="inner music flex">
-                    <div class="player flex">
-                        <audio src="audio/lofi.mp3" loop></audio>
-                        <span class="audio-name">lo-fi</span>
-                        <i class="fa fa-play play-button" aria-hidden="true"></i>
-                        <input type="range" class="music-volume" value="50" min="0" max="100">
-                    </div>
-                </div>
-                <div class="inner music flex">
-                    <div class="player flex">
-                        <audio src="audio/chill_mix.mp3" loop></audio>
-                        <span class="audio-name">chill mix</span>
-                        <i class="fa fa-play play-button" aria-hidden="true"></i>
-                        <input type="range" class="music-volume" value="50" min="0" max="100">
-                    </div>
-                </div>
-            </div>
-            <div id="backgrounds" class="menu-action">
-                <p class="flex">backgrounds</p>
-                <div class="inner backgrounds flex">
-                    <img src="img/gas_station.gif" alt="">
-                    <span>station</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/coffee.gif" alt="">
-                    <span>coffee</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/night_play.gif" alt="">
-                    <span>night play</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/night_workspace.gif" alt="">
-                    <span>night workspace</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/town.gif" alt="">
-                    <span>town</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/stars.gif" alt="">
-                    <span>falling stars</span>
-                </div>
-                <div class="inner backgrounds flex">
-                    <img src="img/sunset.gif" alt="">
-                    <span>sunset</span>
-                </div>
-            </div>
+    <div class="wrapper">
+        <div id="background" class="flex">
+            <img src="img/gas_station.gif" alt="">
         </div>
-    </aside>
 
-    <main class="flex">
-        <div class="current-task">
-            <div class="time flex">
-                <p id="time"></p>
-            </div>
-            <div class="time-actions flex">
-                <button class="action start">start</button>
-                <button class="action pause">pause</button>
-                <button class="action stop">stop</button>
-                <button class="action done">done</button>
-                <button class="action delete">delete</button>
-            </div>
-            <div class="current-task-info">
-                <span class="info sessions">sessions: <span class="current-count"></span></span>
-                <span class="info total">total: <span class="current-total"></span></span>
-                <span class="info remaining">remaining: <span class="current-remaining"></span></span>
-            </div>
-            <hr>
-            <div class="description flex">
-                <div class="edit-state flex">
-                    <textarea></textarea>
-                    <div class="actions flex">
+        <audio src="audio/alert.mp3" id="alert"></audio>
+
+        <div class="menu-button">
+            <div class="burger first"></div>
+            <div class="burger second"></div>
+            <div class="burger third"></div>
+        </div>
+
+        <aside class="menu">
+            <div class="container">
+                <div id="settings" class="menu-action">
+                    <p class="flex">settings</p>
+                    <div class="inner settings flex">
+                        <span>session duration:</span>
+                        <input id="SESSION" type="text" value="25" maxlength="2">
+                    </div>
+                    <div class="inner settings flex">
+                        <span>short break duration:</span>
+                        <input id="BREAK" type="text" value="5" maxlength="2">
+                    </div>
+                    <div class="inner settings flex">
+                        <span>long break duration:</span>
+                        <input id="LONG_BREAK" type="text" value="30" maxlength="2">
+                    </div>
+                    <div class="inner settings flex">
+                        <span>sessions for long break:</span>
+                        <input id="BREAK_COUNT" type="text" value="4" maxlength="1">
+                    </div>
+                    <div class="inner settings flex">
                         <button class="save">save</button>
-                        <button class="delete">cancel</button>
+                        <button class="reset">reset</button>
                     </div>
                 </div>
-                <p class="visible"></p>
-            </div>
-            <hr>
-        </div>
-
-        <div class="add-task flex">
-            <div>
-                <input type="text" maxlength="300" id="add-task-input" placeholder="add new task">
-                <p id="chars"></p>
-            </div>
-        </div>
-
-        <div class="task-list flex">
-            <div id="tasks" class="flex">
-                <div id="task-count" class="flex">
-                    <h2>
-
-                    </h2>
+                <div id="music" class="menu-action">
+                    <p class="flex">audio</p>
+                    <div class="inner music flex">
+                        <div class="player flex">
+                            <audio src="audio/skyrim.mp3" loop></audio>
+                            <span class="audio-name">skyrim</span>
+                            <i class="fa fa-play play-button" aria-hidden="true"></i>
+                            <input type="range" class="music-volume" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="inner music flex">
+                        <div class="player flex">
+                            <audio src="audio/cafe.mp3" loop></audio>
+                            <span class="audio-name">cafe</span>
+                            <i class="fa fa-play play-button" aria-hidden="true"></i>
+                            <input type="range" class="music-volume" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="inner music flex">
+                        <div class="player flex">
+                            <audio src="audio/forest.mp3" loop></audio>
+                            <span class="audio-name">forest</span>
+                            <i class="fa fa-play play-button" aria-hidden="true"></i>
+                            <input type="range" class="music-volume" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="inner music flex">
+                        <div class="player flex">
+                            <audio src="audio/lofi.mp3" loop></audio>
+                            <span class="audio-name">lo-fi</span>
+                            <i class="fa fa-play play-button" aria-hidden="true"></i>
+                            <input type="range" class="music-volume" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                    <div class="inner music flex">
+                        <div class="player flex">
+                            <audio src="audio/chill_mix.mp3" loop></audio>
+                            <span class="audio-name">chill mix</span>
+                            <i class="fa fa-play play-button" aria-hidden="true"></i>
+                            <input type="range" class="music-volume" value="50" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+                <div id="backgrounds" class="menu-action">
+                    <p class="flex">backgrounds</p>
+                    <div class="inner backgrounds flex">
+                        <img src="img/gas_station.gif" alt="">
+                        <span>station</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/coffee.gif" alt="">
+                        <span>coffee</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/night_play.gif" alt="">
+                        <span>night play</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/night_workspace.gif" alt="">
+                        <span>night workspace</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/town.gif" alt="">
+                        <span>town</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/stars.gif" alt="">
+                        <span>falling stars</span>
+                    </div>
+                    <div class="inner backgrounds flex">
+                        <img src="img/sunset.gif" alt="">
+                        <span>sunset</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </aside>
 
-    <footer class="flex">
-        <a href="https://github.com/Ellywynn" target="_blank">ellywynn &copy2021</a>
-    </footer>
+        <main class="flex">
+            <div class="current-task">
+                <div class="time flex">
+                    <p id="time"></p>
+                </div>
+                <div class="time-actions flex">
+                    <button class="action start">start</button>
+                    <button class="action pause">pause</button>
+                    <button class="action stop">stop</button>
+                    <button class="action done">done</button>
+                    <button class="action delete">delete</button>
+                </div>
+                <div class="current-task-info">
+                    <span class="info sessions">sessions: <span class="current-count"></span></span>
+                    <span class="info total">total: <span class="current-total"></span></span>
+                    <span class="info remaining">remaining: <span class="current-remaining"></span></span>
+                </div>
+                <div class="description flex">
+                    <div class="edit-state flex">
+                        <textarea></textarea>
+                        <div class="actions flex">
+                            <button class="save">save</button>
+                            <button class="delete">cancel</button>
+                        </div>
+                    </div>
+                    <p class="visible"></p>
+                </div>
+            </div>
 
+            <div class="add-task flex">
+                <div>
+                    <input type="text" maxlength="300" id="add-task-input" placeholder="add new task">
+                    <p id="chars"></p>
+                </div>
+            </div>
+
+            <div class="task-list flex">
+                <div id="tasks" class="flex">
+                    <div id="task-count" class="flex">
+                        <h2>
+
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="flex">
+            <a href="https://github.com/Ellywynn" target="_blank">ellywynn &copy2021</a>
+        </footer>
+    </div>
     <!-- jQuery -->
     <script src=" https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

@@ -6,11 +6,17 @@
     --light-solid-color: #fff;
     --main-text-color: var(--light-main-color);
     --main-solid-color: var(--light-solid-color);
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html{
     height: 100%;
     width: 100%;
+}
+
+.wrapper{
+    width: 100%;
+    height: 100%;
     position: relative;
 }
 
@@ -28,8 +34,8 @@ body, html{
     position: fixed;
     min-width: 100%;
     min-height: 100%;
-    height: 100%;
     width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
     z-index: -1;
@@ -69,20 +75,6 @@ button{
     transition: all 150ms ease;
 }
 
-button:hover{
-    font-size: 30px;
-    color: var(--main-solid-color);
-}
-
-button:before{
-    font-size: 20px;
-    color: var(--main-text-color);
-}
-
-button:active{
-    font-size: 35px;
-}
-
 ::-webkit-scrollbar{
     width: 5px;
 }
@@ -115,10 +107,6 @@ button:active{
     left: 0;
 }
 
-.menu-button:hover{
-    cursor: pointer;
-}
-
 .menu-button .first{
     top: 10;
 }
@@ -145,12 +133,16 @@ button:active{
     transform: scale(0);
 }
 
+.no-scroll{
+    overflow: hidden;
+}
+
 .menu{
     transition: all 400ms ease;
     visibility: hidden;
     min-width: 200px;
     max-width: 0;
-    width: 40%;
+    width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.4);
     color: var(--main-solid-color);
@@ -168,6 +160,9 @@ button:active{
     visibility: visible;
     transform: translateX(0px);
 }
+.menu.active body{
+    position: fixed;
+}
 
 .menu .container{
     margin-top: 90px;
@@ -184,10 +179,6 @@ button:active{
     width: 100%;
     height: 50px;
     background-color: rgba(240, 235, 235, 0.15);
-}
-
-.menu-action p:hover{
-    background-color: rgba(0,0,0,0.3);
 }
 
 .inner{
@@ -260,14 +251,6 @@ button:active{
     visibility: hidden;
 }
 
-.play-button:hover{
-    cursor: pointer;
-}
-
-.audio-name:hover{
-    cursor: default;
-}
-
 .audio-name{
     text-align: center;
     width: 35%;
@@ -276,10 +259,6 @@ button:active{
 .inner.backgrounds{
     position: relative;
     width: 100%;
-}
-
-.inner.backgrounds:hover{
-    cursor: pointer;
 }
 
 .inner.backgrounds img{
@@ -324,10 +303,6 @@ button:active{
     padding: 15px;
     transition: all 550ms;
     background-color: rgba(0,0,0,0.4);
-}
-
-.description:hover{
-    background-color: rgba(0,0,0,0.6);
 }
 
 .description p{
@@ -387,14 +362,13 @@ button:active{
 
 .add-task{
     margin-top: 60px;
-    height: 200px;
+    height: 600px;
     width: 100%;
-    margin: 150px 0;
 }
 
 .add-task div{
-    width: 80%;
-    height: 70%;
+    width: 100%;
+    height: 100%;
     position: relative;
 }
 
@@ -436,18 +410,6 @@ button:active{
     width: 100%;
 }
 
-.done:hover, .save:hover{
-    color: rgb(0,200,0);
-    border-color: green;
-    background-color: rgba(0,200,0,0.3);
-}
-
-.delete:hover, .reset:hover{
-    color: red;
-    border: 2px solid red;
-    background-color: rgba(200,0,0,0.3);
-}
-
 #tasks{
     flex-direction: column;
     justify-content: flex-start;
@@ -474,16 +436,6 @@ button:active{
     color: var(--main-text-color);
     margin: 15px 0;
     transition: all 400ms;
-}
-
-.task:hover{
-    background-color: rgba(0,0,0,0.5);
-    color: var(--main-solid-color);
-    border-color: rgba(0,0,0,0.7);
-}
-
-.task:hover .task-info{
-    color: var(--main-solid-color);
 }
 
 .task .total{
@@ -533,16 +485,6 @@ button:active{
     border-radius: 50%;
     text-align: center;
     font-size: 30px;
-}
-
-.add-sub > button:hover{
-    cursor: pointer;
-    font-size: 35px;
-    color: var(--main-solid-color);
-}
-
-.add-sub > button:active{
-    font-size: 38px;
 }
 
 .task-duration{
@@ -760,7 +702,34 @@ footer a{
     }
 }
 
-@media only screen and (min-width: 600px){
+@media only screen and (max-width: 360px){
+    #add-task-input{
+        font-size: 35px;
+        padding: 0 5px;
+    }
+    #add-task-input:hover, #add-task-input:focus{
+        font-size: 40px;
+    }
+    .task-info{
+        height: 170px;
+    }
+    .task-duration{
+        height: 70px;
+    }
+    .task-sessions{
+        width: 100%;
+        height: 40px;
+    }
+    .add-sub button{
+        border-radius: 5px;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 767px){
     #background img{
         min-width: 100%;
         min-height: 100%;
@@ -1010,5 +979,124 @@ footer a{
     }
     .task-description p{
         font-size: 35px;
+    }
+}
+
+@media only screen and (min-width: 1201px){
+    .done:hover, .save:hover{
+        color: rgb(0,200,0);
+        border-color: green;
+        background-color: rgba(0,200,0,0.3);
+        font-size: 30px;
+    }
+    .delete:hover, .reset:hover{
+        color: red;
+        border: 2px solid red;
+        background-color: rgba(200,0,0,0.3);
+        font-size: 30px;
+    }
+    .task:hover{
+        background-color: rgba(0,0,0,0.5);
+        color: var(--main-solid-color);
+        border-color: rgba(0,0,0,0.7);
+    }
+    .task:hover .task-info{
+        color: var(--main-solid-color);
+    }
+    .add-sub > button:hover{
+        cursor: pointer;
+        font-size: 35px;
+        color: var(--main-solid-color);
+    }
+    .add-sub > button:active{
+        font-size: 38px;
+    }
+    #add-task-input:hover, #add-task-input:focus{
+        font-size: 50px;
+        border: 3px solid var(--main-solid-color);
+        border-radius: 10px;
+    }
+    .menu-button:hover{
+        cursor: pointer;
+    }
+    .menu-action p:hover{
+        background-color: rgba(0,0,0,0.3);
+    }
+    .play-button:hover{
+        cursor: pointer;
+    }
+    .audio-name:hover{
+        cursor: default;
+    }
+    .inner.backgrounds:hover{
+        cursor: pointer;
+    }
+    .description:hover{
+        background-color: rgba(0,0,0,0.6);
+    }
+    /* */
+    #time{
+        font-size: 350px;
+    }
+    .time-actions button{
+        min-width: 170px;
+        min-height: 50px;
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .time-actions button:hover{
+        font-size: 40px;
+    }
+    .current-task-info{
+        font-size: 40px;
+        gap: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .add-task{
+        width: 90%;
+        height: 120px;
+        margin: 30px 0;
+    }
+    #add-task-input{
+        font-size: 70px;
+    }
+    #add-task-input:hover, #add-task-input:focus{
+        font-size: 75px;
+        padding: 10px 0;
+    }
+    #chars{
+        font-size: 12px;
+    }
+    #task-count{
+        font-size: 70px;
+        height: 80px;
+    }
+    .task-info{
+        width: 30%;
+    }
+    .task-duration{
+        font-size: 100px;
+        height: 90px;
+        margin-bottom: 5px;
+    }
+    .add-sub button{
+        width: 35px;
+        height: 35px;
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .done-delete button{
+        min-width: 110px;
+        min-height: 50px;
+        font-size: 25px;
+    }
+    .task-description p{
+        font-size: 40px;
     }
 }

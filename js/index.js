@@ -29,6 +29,7 @@ function initMenu() {
             e.stopPropagation();
             $('.menu-button,.menu').toggleClass('active');
             $('.inner').removeClass('visible');
+            $('body').toggleClass('no-scroll');
         });
 
         $('#settings p').click(e => {
@@ -50,6 +51,7 @@ function initMenu() {
             if ($('.menu-button').hasClass('active')) {
                 $('.menu-button,.menu').toggleClass('active');
                 $('.inner').removeClass('visible');
+                $('body').toggleClass('no-scroll');
             }
         });
 
@@ -125,6 +127,7 @@ function initElements() {
         createTask(input.value);
         input.value = '';
         chars.textContent = '';
+        input.blur();
     });
 
     document.querySelectorAll('.inner.backgrounds').forEach(item => {
