@@ -492,7 +492,7 @@ function setCurrentTotal(text) {
 }
 
 function startBreakSession() {
-    alert.play();
+    notification.play();
     breakCount++;
     isBreakTime = true;
     let isLongBreak = breakCount === settings['BREAK_COUNT'];
@@ -505,7 +505,7 @@ function startBreakSession() {
 }
 
 function stopBreakSession() {
-    alert.play();
+    notification.play();
     timerIsActive = false;
     isBreakTime = false;
     minutes = settings['SESSION'];
