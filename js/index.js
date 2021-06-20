@@ -15,6 +15,8 @@ let timerID = 0, breakCount = 0;
 let timerIsActive = false;
 let isBreakTime = false;
 
+let smartphone = false;
+
 init();
 
 function init() {
@@ -73,6 +75,9 @@ function initMenu() {
             if (e.target.classList.contains('fa-play')) audio.pause();
             else audio.play();
         });
+
+        changeBackgroundsOnResize();
+        $(window).on('resize', changeBackgroundsOnResize);
     });
 }
 
@@ -627,4 +632,24 @@ function toggleEditBlock() {
     const editBlock = document.querySelector('.edit-state');
     descText.classList.toggle('visible');
     editBlock.classList.toggle('visible');
+}
+
+function changeBackgroundsOnResize() {
+    // for smartphones
+    if(window.innerWidth < 600 && !smartphone) {
+        smartphone = true;
+        changeTumbnails('jpeg');
+    } else if(window.innerWidth > 600 && smartphone) {
+        smartphone = false;
+        changeTumbnails('gif');
+    }
+}
+
+function changeTumbnails(extention) {
+    // change background tumbnails
+    $('#backgrounds img').each(function() {
+        const fileName = $(this).attr('src').split('.')[0];
+        $(this).attr('src', fileName + '.' + extention);
+    });
+    $('#background img').attr('src', $('#background img').attr('src').split('.')[0] + '.' + extention);
 }
